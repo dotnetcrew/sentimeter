@@ -25,6 +25,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentimeter.DataRetrieval.Worker", "src\Sentimeter.DataRetrieval.Worker\Sentimeter.DataRetrieval.Worker.csproj", "{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{8E62D1A5-D215-4957-8F2F-95FEEBDE2520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentimeter.Support.Migration.Worker", "src\Sentimeter.Support.Migration.Worker\Sentimeter.Support.Migration.Worker.csproj", "{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +65,14 @@ Global
 		{7F430A6B-2B9B-42E7-82AC-72E0B680F524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F430A6B-2B9B-42E7-82AC-72E0B680F524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F430A6B-2B9B-42E7-82AC-72E0B680F524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,5 +85,8 @@ Global
 		{6F699FEF-4CF9-4EA1-A183-54438CED06FE} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
 		{0A7E19EC-1A7F-4F09-A735-AC6F084E7C68} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
 		{7F430A6B-2B9B-42E7-82AC-72E0B680F524} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
+		{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
+		{8E62D1A5-D215-4957-8F2F-95FEEBDE2520} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
+		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1} = {8E62D1A5-D215-4957-8F2F-95FEEBDE2520}
 	EndGlobalSection
 EndGlobal

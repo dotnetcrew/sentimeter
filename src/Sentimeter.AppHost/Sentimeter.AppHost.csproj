@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sentimeter.Analysis.Worker\Sentimeter.Analysis.Worker.csproj" />
+    <ProjectReference Include="..\Sentimeter.DataRetrieval.Worker\Sentimeter.DataRetrieval.Worker.csproj" />
+    <ProjectReference Include="..\Sentimeter.Support.Migration.Worker\Sentimeter.Support.Migration.Worker.csproj" />
     <ProjectReference Include="..\Sentimeter.Web.Api\Sentimeter.Web.Api.csproj" />
     <ProjectReference Include="..\Sentimeter.Web.App\Sentimeter.Web.App.csproj" />
   </ItemGroup>

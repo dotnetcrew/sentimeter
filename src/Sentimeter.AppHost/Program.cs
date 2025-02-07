@@ -47,4 +47,16 @@ var analysisWorker = builder.AddProject<Sentimeter_Analysis_Worker>("sentimeter-
     .WaitFor(db);
 #endregion
 
+#region Data Retrieval Worker
+builder.AddProject<Sentimeter_DataRetrieval_Worker>("sentimeter-dataretrieval-worker")
+    .WithReference(db)
+    .WaitFor(db);
+#endregion
+
+#region Support Migration Worker
+builder.AddProject<Sentimeter_Support_Migration_Worker>("sentimeter-support-migration-worker")
+    .WithReference(db)
+    .WaitFor(db);
+#endregion
+
 builder.Build().Run();
