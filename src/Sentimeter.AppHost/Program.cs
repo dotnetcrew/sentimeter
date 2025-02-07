@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -5,7 +6,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 #region OLlama
 var ollama = builder.AddOllama("sentimeter-ollama")
     .WithBindMount("../../volumes/ollama", "/root/.ollama")
-    .WithOpenWebUI();
+    .WithOpenWebUI(rb => rb.WithBindMount("../../volumes/ollama-openwebui", "/app/backend/data"));
+
+bool useGpu = builder.Configuration.GetValue<bool>("Ollama:UseGpu",false);
+if(useGpu)
+{
+    ollama.WithGPUSupport();
+}
 
 var llama3 = ollama.AddModel("sentimter-llama3", "llama3.2:1b");
 #endregion
