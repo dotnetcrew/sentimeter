@@ -4,6 +4,8 @@ public class Video
 {
     public Guid Id { get; set; }
 
+    public string UserId { get; set; } = string.Empty;
+
     /// <summary>
     /// Gets or sets the youtube video id
     /// </summary>
