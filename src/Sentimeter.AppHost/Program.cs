@@ -5,8 +5,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 #region OLlama
 var ollama = builder.AddOllama("sentimeter-ollama")
-    .WithBindMount("../../volumes/ollama", "/root/.ollama")
-    .WithOpenWebUI(rb => rb.WithBindMount("../../volumes/ollama-openwebui", "/app/backend/data"));
+    .WithDataVolume("sentimeter-ollama-data")
+    .WithOpenWebUI(rb => rb.WithDataVolume("sentimeter-openwebui-data"));
 
 bool useGpu = builder.Configuration.GetValue<bool>("Ollama:UseGpu",false);
 if(useGpu)
@@ -20,14 +20,14 @@ var llama3 = ollama.AddModel("sentimter-llama3", "llama3.2:1b");
 #region Database
 var postgres = builder.AddPostgres("sentimeter-postgres")
     .WithPgAdmin()
-    .WithDataBindMount("../../volumes/postgres");
+    .WithDataVolume("sentimeter-postgres-data");
 
 var db = postgres.AddDatabase("sentimeter-db");
 #endregion
 
 #region Identity
 var identity = builder.AddKeycloak("sentimeter-identity", 9999)
-    .WithDataBindMount("../../volumes/identity")
+    .WithDataVolume("sentimeter-identity-data")
     .WithRealmImport("./Realms");
 #endregion
 
