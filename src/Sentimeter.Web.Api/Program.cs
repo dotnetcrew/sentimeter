@@ -19,11 +19,6 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(context.GetRequiredService<IConfiguration>().GetConnectionString("messaging"));
-        //cfg.ReceiveEndpoint("weather-forecast", e =>
-        //{
-        //    e.AutoStart = true;
-            
-        //});
     });
 });
 
