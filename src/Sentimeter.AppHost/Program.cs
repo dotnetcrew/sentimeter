@@ -14,7 +14,7 @@ if(useGpu)
     ollama.WithGPUSupport();
 }
 
-var llama3 = ollama.AddModel("sentimter-llama3", "llama3.2:1b");
+var llama3 = ollama.AddModel("sentimeter-llama3", "llama3.2:1b");
 #endregion
 
 #region Database
