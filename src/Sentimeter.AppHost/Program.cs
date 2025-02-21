@@ -31,12 +31,18 @@ var identity = builder.AddKeycloak("sentimeter-identity", 9999)
     .WithRealmImport("./Realms");
 #endregion
 
+#region RabbitMQ
+var rabbitmq = builder.AddRabbitMQ("messaging").WithManagementPlugin();
+#endregion
+
 #region Web Api
 var webApi = builder.AddProject<Sentimeter_Web_Api>("sentimeter-webapi")
     .WithReference(identity)
+    .WithReference(rabbitmq)
     .WaitFor(identity)
     .WithReference(db)
-    .WaitFor(db);
+    .WaitFor(db)
+    .WaitFor(rabbitmq);
 #endregion
 
 #region Web App
@@ -57,7 +63,9 @@ var analysisWorker = builder.AddProject<Sentimeter_Analysis_Worker>("sentimeter-
 #region Data Retrieval Worker
 builder.AddProject<Sentimeter_DataRetrieval_Worker>("sentimeter-dataretrieval-worker")
     .WithReference(db)
-    .WaitFor(db);
+    .WithReference(rabbitmq)
+    .WaitFor(db)
+    .WaitFor(rabbitmq);
 #endregion
 
 #region Support Migration Worker
