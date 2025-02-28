@@ -32,7 +32,9 @@ var identity = builder.AddKeycloak("sentimeter-identity", 9999)
 #endregion
 
 #region RabbitMQ
-var rabbitmq = builder.AddRabbitMQ("messaging").WithManagementPlugin();
+var rabbitmq = builder.AddRabbitMQ("messaging")
+    .WithExternalHttpEndpoints()
+    .WithManagementPlugin();
 #endregion
 
 #region Web Api

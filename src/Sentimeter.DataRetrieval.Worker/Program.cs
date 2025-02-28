@@ -4,33 +4,16 @@ using Sentimeter.DataRetrieval.Worker;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
-builder.Services.AddHostedService<Worker>();
 
-builder.Services.Configure<MassTransitHostOptions>(options =>
-{
-    options.WaitUntilStarted = true;
-});
-
-
-builder.Services.AddMassTransit(x =>
-{
-    x.UsingRabbitMq((context, cfg) =>
+builder.AddMassTransitRabbitMq(
+    "messaging",
+    options => options.DisableTelemetry = false,
+    configuration =>
     {
-        cfg.Host(context.GetRequiredService<IConfiguration>().GetConnectionString("messaging"));
-
-        cfg.ReceiveEndpoint("weather-forecast", e =>
-        {
-            e.ConfigureConsumer<VideoPublishedConsumer>(context);
-
-        });
-
-
-        cfg.ConfigureEndpoints(context);
-
+        configuration.AddConsumer<VideoPublishedConsumer>();
     });
-    x.AddConsumer<VideoPublishedConsumer>();
 
-});
+builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
 host.Run();
