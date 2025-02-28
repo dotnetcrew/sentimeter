@@ -1,4 +1,3 @@
-using MassTransit;
 using Sentimeter.DataRetrieval.Worker;
 
 var builder = Host.CreateApplicationBuilder(args);

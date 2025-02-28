@@ -5,7 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddMassTransitRabbitMq("messaging");
+builder.AddMassTransitRabbitMq(
+    "messaging",
+    massTransitConfiguration: _ =>
+    {
+        EndpointConvention.Map<VideoPublishedMessage>(new Uri("queue:video-published"));
+    });
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -32,7 +37,7 @@ app.MapGet("/weatherforecast", async (IBus bus)  =>
     //var endpoint = await sendEndpointProvider.GetSendEndpoint(new Uri("queue:weather-forecast"));
     //await endpoint.Send(new VideoPublishedMessage(1));
 
-    await bus.Publish(new VideoPublishedMessage(1));
+    await bus.Send(new VideoPublishedMessage(1));
 
     var forecast =  Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
