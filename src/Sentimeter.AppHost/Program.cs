@@ -6,7 +6,12 @@ var builder = DistributedApplication.CreateBuilder(args);
 #region OLlama
 var ollama = builder.AddOllama("sentimeter-ollama")
     .WithDataVolume("sentimeter-ollama-data")
-    .WithOpenWebUI(rb => rb.WithDataVolume("sentimeter-openwebui-data"));
+    .WithOpenWebUI(
+        rb =>
+        {
+            rb.WithDataVolume("sentimeter-openwebui-data");
+            rb.WithExplicitStart();
+        });
 
 bool useGpu = builder.Configuration.GetValue<bool>("Ollama:UseGpu",false);
 if(useGpu)
@@ -19,7 +24,7 @@ var llama3 = ollama.AddModel("sentimeter-llama3", "llama3.2:1b");
 
 #region Database
 var postgres = builder.AddPostgres("sentimeter-postgres")
-    .WithPgAdmin()
+    .WithPgAdmin(rb => rb.WithExplicitStart())
     .WithDataVolume("sentimeter-postgres-data");
 
 var db = postgres.AddDatabase("sentimeter-db");
