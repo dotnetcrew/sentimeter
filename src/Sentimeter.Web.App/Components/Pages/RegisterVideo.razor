@@ -11,54 +11,65 @@
 }
 else
 {
-    <EditForm Model="model" role="form">
-        <DataAnnotationsValidator />
+    <div class="row">
+        <div class="col-md-8">
+            <EditForm Model="model" role="form">
+                <DataAnnotationsValidator />
 
-        <div class="mb-2">
-            <label>Video URL</label>
-            <div class="input-group">
-                <span class="input-group-text" id="youtube-baseurl">https://www.youtube.com/watch?v=</span>
-                <InputText @bind-Value="model.VideoId"
-                           @bind-Value:after="DiscoveryVideoInformationAsync"
-                           class="form-control"
-                           aria-describedby="youtube-baseurl youtube-videoid-description" />
-            </div>
-            <div class="form-text" id="youtube-videoid-description">Copy and paste the ID of the video you want to register.</div>
+                <div class="mb-2">
+                    <label>Video URL</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="youtube-baseurl">https://www.youtube.com/watch?v=</span>
+                        <InputText @bind-Value="model.VideoId"
+                                   @bind-Value:after="DiscoveryVideoInformationAsync"
+                                   class="form-control"
+                                   aria-describedby="youtube-baseurl youtube-videoid-description" />
+                    </div>
+                    <div class="form-text" id="youtube-videoid-description">Copy and paste the ID of the video you want to register.</div>
 
-            <ValidationMessage For="@(() => model.VideoId)" class="text-danger" />
-        </div>
-        @if (loadingVideoInformation)
-        {
-            <div class="mb-2">
-                <p>loading video information...</p>
-            </div>
-        }
-        else if (!string.IsNullOrEmpty(loadingVideoInformationErrorMessage))
-        {
-            <div class="mb-2">
-                <div class="alert alert-danger">
-                    @loadingVideoInformationErrorMessage
+                    <ValidationMessage For="@(() => model.VideoId)" class="text-danger" />
                 </div>
-            </div>
-        }
+                @if (loadingVideoInformation)
+                {
+                    <div class="mb-2">
+                        <p>loading video information...</p>
+                    </div>
+                }
+                else if (!string.IsNullOrEmpty(loadingVideoInformationErrorMessage))
+                {
+                    <div class="mb-2">
+                        <div class="alert alert-danger">
+                            @loadingVideoInformationErrorMessage
+                        </div>
+                    </div>
+                }
 
-        <div class="mb-2">
-            <label>Title</label>
-            <InputText @bind-Value="model.Title" class="form-control" readonly="true" />
-        </div>
+                <div class="mb-2">
+                    <label>Title</label>
+                    <InputText @bind-Value="model.Title" class="form-control" readonly="true" />
+                </div>
 
-        <div class="mb-2">
-            <label>Description</label>
-            <InputTextArea @bind-Value="model.Description" class="form-control" readonly="true" rows="10" />
-        </div>
+                <div class="mb-2">
+                    <label>Description</label>
+                    <InputTextArea @bind-Value="model.Description" class="form-control" readonly="true" rows="10" />
+                </div>
 
-        <div class="mb-2">
-            <label>Publish date</label>
-            <InputDate @bind-Value="model.PublishedAt" class="form-control" readonly="true" />
-        </div>
+                <div class="mb-2">
+                    <label>Publish date</label>
+                    <InputDate @bind-Value="model.PublishedAt" class="form-control" readonly="true" />
+                </div>
 
-        <div class="mb-2">
-            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                <div class="mb-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                </div>
+            </EditForm>
         </div>
-    </EditForm>
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(model.VideoId))
+            {
+                <iframe style="width: 100%; aspect-ratio: 16/9;" src="https://www.youtube.com/embed/@model.VideoId" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            }
+        </div>
+    </div>
+
 }
