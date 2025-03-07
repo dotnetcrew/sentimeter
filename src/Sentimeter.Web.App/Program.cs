@@ -1,10 +1,33 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Sentimeter.Web.App.Components;
+using Sentimeter.Web.App.Identity;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
+builder.Services.AddHttpContextAccessor()
+    .AddTransient<SentimeterAuthorizationHandler>();
+
+var oidcScheme = OpenIdConnectDefaults.AuthenticationScheme;
+
+builder.Services.AddAuthentication(oidcScheme)
+    .AddKeycloakOpenIdConnect("sentimeter-identity", realm: "Sentimeter", oidcScheme, options =>
+    {
+        options.ClientId = "sentimeter.webapp";
+        options.ResponseType = OpenIdConnectResponseType.Code;
+        options.Scope.Add("sentimeter:all");
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
+        options.SaveTokens = true;
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
+builder.Services.AddCascadingAuthenticationState();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -27,6 +50,7 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.MapIdentityEndpoints();
 app.MapDefaultEndpoints();
 
 app.Run();

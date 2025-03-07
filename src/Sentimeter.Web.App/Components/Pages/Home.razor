@@ -1,7 +1,20 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Sentimeter - Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Welcome to Sentimeter</h1>
 
-Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        <p>Welcome @context.User.Identity?.Name!</p>
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            Please login to start using sentimeter.
+        </div>
+        <hr/>
+        <div>
+            <a href="authentication/login" class="btn btn-primary">Login</a>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>

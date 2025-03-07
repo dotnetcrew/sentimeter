@@ -16,6 +16,18 @@ builder.AddMassTransitRabbitMq(
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddAuthentication()
+    .AddKeycloakJwtBearer(
+        serviceName: "sentimeter-identity",
+        realm: "Sentimeter",
+        configureOptions: options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.Audience = "sentimeter.api";
+        });
+
+builder.Services.AddAuthorizationBuilder();
+
 
 var app = builder.Build();
 
@@ -32,22 +44,14 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", async (IBus bus)  =>
+app.MapGet("/test", async (IBus bus)  =>
 {
     //var endpoint = await sendEndpointProvider.GetSendEndpoint(new Uri("queue:weather-forecast"));
     //await endpoint.Send(new VideoPublishedMessage(1));
 
-    await bus.Send(new VideoPublishedMessage(1));
+    await bus.Send(new VideoPublishedMessage(Guid.NewGuid()));
 
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    return Results.Accepted();
 })
 .WithName("GetWeatherForecast");
 

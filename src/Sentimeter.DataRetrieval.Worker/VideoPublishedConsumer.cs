@@ -11,7 +11,7 @@ internal class VideoPublishedConsumer : IConsumer<VideoPublishedMessage>
     }
     public Task Consume(ConsumeContext<VideoPublishedMessage> context)
     {
-        _logger.LogInformation($"Video published: {context.Message.videoId}");
+        _logger.LogInformation($"Video published: {context.Message.VideoId}");
 
         return Task.CompletedTask;
     }

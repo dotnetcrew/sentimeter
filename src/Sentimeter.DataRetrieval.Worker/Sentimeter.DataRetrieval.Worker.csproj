@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.1.0" />
     <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.2.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sentimeter.Core\Sentimeter.Core.csproj" />
     <ProjectReference Include="..\Sentimeter.ServiceDefaults\Sentimeter.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Sentimeter.Shared\Sentimeter.Shared.csproj" />
   </ItemGroup>

@@ -1,8 +1,11 @@
+using Sentimeter.Core;
 using Sentimeter.DataRetrieval.Worker;
+using Sentimeter.Shared;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddNpgsqlDbContext<SentimeterDbContext>(connectionName: ServiceNames.Db);
 
 builder.AddMassTransitRabbitMq(
     "messaging",

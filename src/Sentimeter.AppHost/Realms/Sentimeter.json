@@ -479,8 +479,8 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [ "https://localhost:7275/signin-oidc" ],
-      "webOrigins": [ "https://localhost:7275" ],
+      "redirectUris": [ "https://localhost:7147/signin-oidc" ],
+      "webOrigins": [ "https://localhost:7147" ],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -493,7 +493,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "oidc.ciba.grant.enabled": "false",
-        "post.logout.redirect.uris": "https://localhost:7275/signout-callback-oidc",
+        "post.logout.redirect.uris": "https://localhost:7147/signout-callback-oidc",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.session.required": "true",
         "backchannel.logout.revoke.offline.tokens": "false"
