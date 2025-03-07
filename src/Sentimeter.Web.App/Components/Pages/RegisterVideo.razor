@@ -30,9 +30,7 @@ else
         @if (loadingVideoInformation)
         {
             <div class="mb-2">
-                <div class="alert alert-info">
-                    loading video information...
-                </div>
+                <p>loading video information...</p>
             </div>
         }
         else if (!string.IsNullOrEmpty(loadingVideoInformationErrorMessage))
@@ -46,17 +44,17 @@ else
 
         <div class="mb-2">
             <label>Title</label>
-            <p class="form-control-plaintext">@model.Title</p>
+            <InputText @bind-Value="model.Title" class="form-control" readonly="true" />
         </div>
 
         <div class="mb-2">
             <label>Description</label>
-            <p class="form-control-plaintext">@model.Description</p>
+            <InputTextArea @bind-Value="model.Description" class="form-control" readonly="true" rows="10" />
         </div>
 
         <div class="mb-2">
             <label>Publish date</label>
-            <p class="form-control-plaintext">@(model.PublishedAt.HasValue ? model.PublishedAt.Value.ToShortDateString() : "-")</p>
+            <InputDate @bind-Value="model.PublishedAt" class="form-control" readonly="true" />
         </div>
 
         <div class="mb-2">
