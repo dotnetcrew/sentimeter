@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Keycloak.Authentication" Version="9.1.0-preview.1.25121.10" />
     <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.2.1" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.69.0.3707" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
   </ItemGroup>
 
@@ -16,6 +17,7 @@
     <ProjectReference Include="..\Sentimeter.Core\Sentimeter.Core.csproj" />
     <ProjectReference Include="..\Sentimeter.ServiceDefaults\Sentimeter.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Sentimeter.Shared\Sentimeter.Shared.csproj" />
+    <ProjectReference Include="..\Sentimeter.Web.Models\Sentimeter.Web.Models.csproj" />
   </ItemGroup>
 
 </Project>

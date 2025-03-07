@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Sentimeter.Web.App.Components;
 using Sentimeter.Web.App.Identity;
+using Sentimeter.Web.App.Services;
 using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,8 @@ builder.Services.AddAuthentication(oidcScheme)
         options.SaveTokens = true;
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
+builder.Services.AddApiClients();
 
 builder.Services.AddCascadingAuthenticationState();
 

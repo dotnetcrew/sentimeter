@@ -7,8 +7,7 @@ namespace Sentimeter.Web.App.Identity;
 
 internal static class IdentityEndpoints
 {
-    public static IEndpointRouteBuilder MapIdentityEndpoints(
-        this IEndpointRouteBuilder builder)
+    public static IEndpointRouteBuilder MapIdentityEndpoints(this IEndpointRouteBuilder builder)
     {
         var identityGroup = builder.MapGroup("/authentication");
 
@@ -18,20 +17,26 @@ internal static class IdentityEndpoints
         return builder;
     }
 
-    static ChallengeHttpResult Login() =>
-        TypedResults.Challenge(properties: new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        });
+    private static ChallengeHttpResult Login()
+    {
+        return TypedResults.Challenge(
+            properties: new AuthenticationProperties 
+            { 
+                RedirectUri = "/" 
+            });
+    }
 
-    static SignOutHttpResult Logout() =>
-        TypedResults.SignOut(properties: new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        },
-        [
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            OpenIdConnectDefaults.AuthenticationScheme
-        ]);
+    private static SignOutHttpResult Logout()
+    {
+        return TypedResults.SignOut(
+            properties: new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            },
+            [
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme
+            ]);
+    }
 }
 

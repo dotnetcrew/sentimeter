@@ -43,13 +43,16 @@ var rabbitmq = builder.AddRabbitMQ("messaging")
 #endregion
 
 #region Web Api
+var youtubeApiKey = builder.AddParameter("YoutubeApiKey", secret: true);
+
 var webApi = builder.AddProject<Sentimeter_Web_Api>("sentimeter-webapi")
     .WithReference(identity)
     .WithReference(rabbitmq)
     .WaitFor(identity)
     .WithReference(db)
     .WaitFor(db)
-    .WaitFor(rabbitmq);
+    .WaitFor(rabbitmq)
+    .WithEnvironment("YOUTUBE_APIKEY", youtubeApiKey);
 #endregion
 
 #region Web App

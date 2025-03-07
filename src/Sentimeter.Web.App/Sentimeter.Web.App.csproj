@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sentimeter.ServiceDefaults\Sentimeter.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Sentimeter.Shared\Sentimeter.Shared.csproj" />
+    <ProjectReference Include="..\Sentimeter.Web.Models\Sentimeter.Web.Models.csproj" />
   </ItemGroup>
 
 </Project>

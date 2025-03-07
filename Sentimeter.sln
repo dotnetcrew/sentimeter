@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{8E62
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentimeter.Support.Migration.Worker", "src\Sentimeter.Support.Migration.Worker\Sentimeter.Support.Migration.Worker.csproj", "{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentimeter.Web.Models", "src\Sentimeter.Web.Models\Sentimeter.Web.Models.csproj", "{64E6D64F-B1EB-418E-B83D-5735D3D32ECA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64E6D64F-B1EB-418E-B83D-5735D3D32ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E6D64F-B1EB-418E-B83D-5735D3D32ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E6D64F-B1EB-418E-B83D-5735D3D32ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E6D64F-B1EB-418E-B83D-5735D3D32ECA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,5 +94,9 @@ Global
 		{8A8452B3-BDA3-4D31-8E83-00D2A1DC08B6} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
 		{8E62D1A5-D215-4957-8F2F-95FEEBDE2520} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
 		{81ECDA31-3F0A-4AC8-9BF7-560DD54AC6E1} = {8E62D1A5-D215-4957-8F2F-95FEEBDE2520}
+		{64E6D64F-B1EB-418E-B83D-5735D3D32ECA} = {C846C46A-FF35-48F3-A8D1-6E794E0E0270}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F37BF37-EFC0-4E1B-BC0F-7ED5A22FFE9B}
 	EndGlobalSection
 EndGlobal

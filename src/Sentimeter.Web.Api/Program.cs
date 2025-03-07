@@ -1,5 +1,7 @@
 using MassTransit;
 using Sentimeter.Shared.Messages;
+using Sentimeter.Web.Api.Endpoints;
+using Sentimeter.Web.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,7 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddAuthorizationBuilder();
 
+builder.Services.AddYouTubeVideoRetriever(builder.Configuration["YOUTUBE_APIKEY"]!);
 
 var app = builder.Build();
 
@@ -54,6 +57,8 @@ app.MapGet("/test", async (IBus bus)  =>
     return Results.Accepted();
 })
 .WithName("GetWeatherForecast");
+
+app.MapVideoEndpoints();
 
 app.MapDefaultEndpoints();
 
