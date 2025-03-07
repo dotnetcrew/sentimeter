@@ -1,5 +1,9 @@
+using Akka.Hosting;
 using Sentimeter.Core;
 using Sentimeter.DataRetrieval.Worker;
+using Sentimeter.DataRetrieval.Worker.Akka.Actors;
+using Sentimeter.DataRetrieval.Worker.Configuration;
+using Sentimeter.DataRetrieval.Worker.Services;
 using Sentimeter.Shared;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -15,7 +19,27 @@ builder.AddMassTransitRabbitMq(
         configuration.AddConsumer<VideoPublishedConsumer>();
     });
 
-builder.Services.AddHostedService<Worker>();
+builder.Services.Configure<DataRetrivalSettings>(builder.Configuration.GetSection(DataRetrivalSettings.JsonSection));
+
+builder.Services.AddScoped<IVideoAndCommentService, VideoAndCommentService>();
+
+builder.Services.AddAkka("SentimeterActorSystem", (configurationBuilder, builder) =>
+{
+    configurationBuilder.ConfigureLoggers(configBuilder => { configBuilder.AddLoggerFactory(builder.GetRequiredService<ILoggerFactory>()); });
+    configurationBuilder.WithActors( (system, registry, resolver) =>
+    {
+        var propsManagerWorkerActor = resolver.Props<ManagerWorkerActor>();
+        var ManagerWorkerActor = system.ActorOf(propsManagerWorkerActor, "DataRetrival_ManagerWorkerActor");
+        registry.Register<ManagerWorkerActor>(ManagerWorkerActor);
+
+        var propsOcrSchedulerActor = resolver.Props<SchedulerActor>();
+        var schedulerActor = system.ActorOf(propsOcrSchedulerActor, "DataRetrival_SchedulerActor");
+        registry.Register<SchedulerActor>(schedulerActor);
+
+    });
+});
+
+//builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
 host.Run();
