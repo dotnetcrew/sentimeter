@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Sentimeter.Web.Api.Services;
+using Sentimeter.Shared.Services;
 using Sentimeter.Web.Models;
 
 namespace Sentimeter.Web.Api.Endpoints;

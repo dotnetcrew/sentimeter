@@ -1,7 +1,8 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Sentimeter.Web.Api.Services;
+namespace Sentimeter.Shared.Services;
 
 public static class ServicesServiceCollectionExtensions
 {

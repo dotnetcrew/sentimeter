@@ -1,7 +1,7 @@
 using MassTransit;
 using Sentimeter.Shared.Messages;
 using Sentimeter.Web.Api.Endpoints;
-using Sentimeter.Web.Api.Services;
+using Sentimeter.Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

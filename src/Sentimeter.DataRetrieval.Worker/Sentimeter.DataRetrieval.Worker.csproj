@@ -13,7 +13,7 @@
     <PackageReference Include="Akka.Hosting" Version="1.5.38" />
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.1.0" />
     <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>

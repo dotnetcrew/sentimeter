@@ -1,7 +1,7 @@
 ﻿using Google.Apis.YouTube.v3;
 using Sentimeter.Web.Models;
 
-namespace Sentimeter.Web.Api.Services;
+namespace Sentimeter.Shared.Services;
 
 public class YouTubeVideoRetriever(YouTubeService youtubeService) : IVideoRetriever
 {

@@ -1,6 +1,6 @@
 ﻿using Sentimeter.Web.Models;
 
-namespace Sentimeter.Web.Api.Services;
+namespace Sentimeter.Shared.Services;
 
 public interface IVideoRetriever
 {
