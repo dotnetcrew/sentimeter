@@ -22,6 +22,7 @@ public partial class RegisterVideo(VideosApiClient videosApiClient)
             model.Title = videoInformation.Title;
             model.Description = videoInformation.Description;
             model.PublishedAt = videoInformation.PublishedAt;
+            model.ThumbnailUrl = videoInformation.ThumbnailUrl;
         }
         catch (InvalidOperationException ex)
         {
@@ -35,5 +36,6 @@ public partial class RegisterVideo(VideosApiClient videosApiClient)
 
     private async Task RegisterVideoAsync()
     {
+        await videosApiClient.RegisterVideoAsync(model);
     }
 }

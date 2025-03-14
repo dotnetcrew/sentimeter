@@ -23,6 +23,7 @@ public class SentimeterDbContext : DbContext
             builder.Property(v => v.Identifier).HasMaxLength(50).IsRequired();
             builder.Property(v => v.Title).HasMaxLength(255).IsRequired();
             builder.Property(v => v.Description).HasMaxLength(1024);
+            builder.Property(v => v.ThumbnailUrl).HasMaxLength(255);
 
             builder.HasMany(v => v.Comments)
                 .WithOne(c => c.Video)

@@ -22,4 +22,17 @@ public class VideosApiClient(HttpClient httpClient)
         }
         
     }
+
+    public async Task RegisterVideoAsync(RegisterVideoModel model)
+    {
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync(ResourceEndpoint, model);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new InvalidOperationException(ex.Message);
+        }
+    }
 }

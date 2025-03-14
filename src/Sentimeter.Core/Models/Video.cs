@@ -17,5 +17,7 @@ public class Video
 
     public DateTime? PublishedAt { get; set; }
 
+    public string? ThumbnailUrl { get; set; }
+
     public virtual IList<Comment> Comments { get; set; } = [];
 }

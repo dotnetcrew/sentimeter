@@ -13,4 +13,6 @@ public class RegisterVideoModel
     public string? Description { get; set; }
 
     public DateTime? PublishedAt { get; set; }
+
+    public string ThumbnailUrl { get; set; } = string.Empty;
 }

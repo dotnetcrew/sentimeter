@@ -19,10 +19,12 @@ public class YouTubeVideoRetriever(YouTubeService youtubeService) : IVideoRetrie
         }
 
         var publishedAt = videoItem.Snippet.PublishedAtDateTimeOffset;
+        var thumbnailUrl = videoItem.Snippet.Thumbnails.Standard.Url;
 
         return new DiscoveryVideoInformationResponseModel(
             videoItem.Snippet.Title,
             videoItem.Snippet.Description,
-            publishedAt.HasValue ? null : publishedAt!.Value.DateTime);
+            publishedAt.HasValue ? null : publishedAt!.Value.DateTime,
+            thumbnailUrl);
     }
 }

@@ -6,4 +6,5 @@ public record DiscoveryVideoInformationModel(
 public record DiscoveryVideoInformationResponseModel(
     string Title,
     string? Description,
-    DateTime? PublishedAt);
+    DateTime? PublishedAt,
+    string ThumbnailUrl);

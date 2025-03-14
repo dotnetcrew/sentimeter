@@ -2,10 +2,14 @@ using MassTransit;
 using Sentimeter.Shared.Messages;
 using Sentimeter.Web.Api.Endpoints;
 using Sentimeter.Shared.Services;
+using Sentimeter.Web.Api.Services;
+using Sentimeter.Core;
+using Sentimeter.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddNpgsqlDbContext<SentimeterDbContext>(connectionName: ServiceNames.Db);
 
 builder.AddMassTransitRabbitMq(
     "messaging",
@@ -31,6 +35,8 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddYouTubeVideoRetriever(builder.Configuration["YOUTUBE_APIKEY"]!);
+
+builder.Services.AddScoped<IVideoEndpointsService, VideoEndpointsService>();
 
 var app = builder.Build();
 
