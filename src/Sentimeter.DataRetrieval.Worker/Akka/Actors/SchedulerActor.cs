@@ -64,7 +64,7 @@ public class SchedulerActor : ReceiverBaseActor, IWithTimers
 
         try
         {
-            // Non avendo id sequenziali per i video ma GUI, devo fare una query in cui prendo i vidfeo ad intervalli tra una schedulazione e l'altra
+            // Non avendo id sequenziali per i video ma GUI, devo fare una query in cui prendo i video ad intervalli tra una schedulazione e l'altra
             // List<VideoOperationInfo> operations = videoOperationService.GetVideoOperations(_settings.SchedulerWorkingItems);
 
             var newVideo = videoCommentsService.RetriveNewVideoWithoutComments(1, _settings.SchedulerWorkingItems);

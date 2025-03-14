@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sentimeter.DataRetrieval.Worker.Akka.Messages;
 
-public class RetriveCommentsMessage
+public class RetriveVideoCommentsMessage
 {
     
     public Guid VideoId { get; }
@@ -15,7 +15,7 @@ public class RetriveCommentsMessage
     public DateTimeOffset? CommentDate { get; }
 
 
-    public RetriveCommentsMessage(Guid videoId, Guid? commentId, DateTimeOffset? commentDate)
+    public RetriveVideoCommentsMessage(Guid videoId, Guid? commentId, DateTimeOffset? commentDate)
     {
         VideoId = videoId;
         CommentId = commentId;

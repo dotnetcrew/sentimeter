@@ -13,8 +13,8 @@ namespace Sentimeter.DataRetrieval.Worker.Services;
 
 public interface IVideoAndCommentService
 {
-    List<RetriveCommentsMessage> RetriveVideosWithLastComment(int skipItemNum, int takeItemNum);
-    List<RetriveCommentsMessage> RetriveNewVideoWithoutComments(int skipItemNum, int takeItemNum);
+    List<RetriveVideoCommentsMessage> RetriveVideosWithLastComment(int skipItemNum, int takeItemNum);
+    List<RetriveVideoCommentsMessage> RetriveNewVideoWithoutComments(int skipItemNum, int takeItemNum);
 }
 
 
@@ -28,10 +28,11 @@ public class VideoAndCommentService : IVideoAndCommentService
     }
 
 
-    public List<RetriveCommentsMessage> RetriveVideosWithLastComment(int skipItemNum, int takeItemNum)
+    public List<RetriveVideoCommentsMessage> RetriveVideosWithLastComment(int skipItemNum, int takeItemNum)
     {
         var lastComments = _context.Comments
             .Include(c => c.Video)
+            .OrderByDescending( v => v.LastUpdate)
             .GroupBy(c => c.Video.Id)
             .Select(g => g.OrderByDescending(c => c.LastUpdate).FirstOrDefault())
             //.Where(c => c != null) // Potrei avere nuovi video ancora senza commenti...
@@ -39,16 +40,16 @@ public class VideoAndCommentService : IVideoAndCommentService
             .Take(takeItemNum)
             .ToList();
 
-        return lastComments.Select(c => new RetriveCommentsMessage(c.Video.Id, c.Id, c.LastUpdate)).ToList();
+        return lastComments.Select(c => new RetriveVideoCommentsMessage(c.Video.Id, c.Id, c.LastUpdate)).ToList();
     }
 
-    public List<RetriveCommentsMessage> RetriveNewVideoWithoutComments(int skipItemNum, int takeItemNum)
+    public List<RetriveVideoCommentsMessage> RetriveNewVideoWithoutComments(int skipItemNum, int takeItemNum)
     {
         var resVideoWithoutComments = _context.Videos
             .Include(v => v.Comments)
             .Where(c => c.Comments.Count == 0);
 
-        return resVideoWithoutComments.Select(c => new RetriveCommentsMessage(c.Id, null, null)).ToList();
+        return resVideoWithoutComments.Select(c => new RetriveVideoCommentsMessage(c.Id, null, null)).ToList();
     }
 
 

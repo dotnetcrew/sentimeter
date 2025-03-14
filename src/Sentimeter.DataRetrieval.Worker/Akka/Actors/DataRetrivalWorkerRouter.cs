@@ -23,14 +23,14 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
     private void WorkingEnabled()
     {
         LogInformation("Actor working enabled");
-        ReceiveAsync<RetriveCommentsMessage>(WorkingOperationMessageHandler);
+        ReceiveAsync<RetriveVideoCommentsMessage>(WorkingOperationMessageHandler);
         Receive<ChangeServiceStatusMessage>(ChangeServiceStatusMessageHandler);
     }
 
     private void WorkingDisabled()
     {
         LogWarning("!!! Actor working disabled !!!");
-        Receive<RetriveCommentsMessage>(WorkOperationStashHandler);
+        Receive<RetriveVideoCommentsMessage>(WorkOperationStashHandler);
         Receive<ChangeServiceStatusMessage>(ChangeServiceStatusMessageHandler);
     }
 
@@ -51,18 +51,18 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
         }
     }
 
-    private void WorkOperationStashHandler(RetriveCommentsMessage message)
+    private void WorkOperationStashHandler(RetriveVideoCommentsMessage message)
     {
         LogInformation("Service disabled -> message stashed: {Message}", message.ToString());
         Stash.Stash();
     }
 
-    private async Task WorkingOperationMessageHandler(RetriveCommentsMessage message)
+    private async Task WorkingOperationMessageHandler(RetriveVideoCommentsMessage message)
     {
         LogInformation($"WorkingOperationMessageHandler: VideoId={message.VideoId}" );
         LogInformation( message.CommentId != null ? $"CommentId={message.CommentId}, CommentDate={message.CommentDate}" : "No CommentId");    
 
-        // Retrive comments using message.VideoId and check lastupdate if commnets !=null
+        // ToDo: Retrive comments using message.VideoId and check lastupdate if commnets !=null
 
     }
 

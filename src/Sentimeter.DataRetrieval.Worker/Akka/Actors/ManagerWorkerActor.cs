@@ -3,11 +3,6 @@ using Akka.Routing;
 using Microsoft.Extensions.Options;
 using Sentimeter.DataRetrieval.Worker.Akka.Messages;
 using Sentimeter.DataRetrieval.Worker.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sentimeter.DataRetrieval.Worker.Akka.Actors;
 
@@ -26,7 +21,7 @@ public class ManagerWorkerActor : ReceiverBaseActor
 
     private void Working()
     {
-        Receive<RetriveCommentsMessage>(WorkingOperationMessageHandler);
+        Receive<RetriveVideoCommentsMessage>(WorkingOperationMessageHandler);
         Receive<ChangeServiceStatusMessage>(ChangeServiceStatusMessageHandler);
     }
 
@@ -38,10 +33,11 @@ public class ManagerWorkerActor : ReceiverBaseActor
 
         LogDebug($"Broadcasting change service status message received to worker actors ...");
         workerActorForNewVideo.Forward(new Broadcast(message));
+        workerActorForExistingVideo.Forward(new Broadcast(message));
         LogDebug($"Broadcast change service status, Done");
     }
 
-    private void WorkingOperationMessageHandler(RetriveCommentsMessage message)
+    private void WorkingOperationMessageHandler(RetriveVideoCommentsMessage message)
     {
         IActorRef workerActor;
 
