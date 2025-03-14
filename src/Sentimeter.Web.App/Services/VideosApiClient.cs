@@ -35,4 +35,10 @@ public class VideosApiClient(HttpClient httpClient)
             throw new InvalidOperationException(ex.Message);
         }
     }
+
+    public async Task<VideoListModel> GetVideosAsync(int page, int size)
+    {
+        var model = await httpClient.GetFromJsonAsync<VideoListModel>($"{ResourceEndpoint}?page={page}&size={size}");
+        return model ?? new();
+    }
 }

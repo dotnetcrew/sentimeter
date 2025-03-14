@@ -19,15 +19,29 @@ internal static class VideoEndpoints
             .WithOpenApi()
             .WithName(nameof(DiscoveryVideoInformation));
 
-        videoGroup.MapPost("", RegisterVideo)
+        videoGroup.MapGet("", GetVideos)
             .WithOpenApi()
-            .WithName(nameof(RegisterVideo));
+            .WithName(nameof(GetVideos));
 
         videoGroup.MapGet("{id:guid}", GetVideoDetail)
             .WithOpenApi()
             .WithName(nameof(GetVideoDetail));
 
+        videoGroup.MapPost("", RegisterVideo)
+            .WithOpenApi()
+            .WithName(nameof(RegisterVideo));
+
         return builder;
+    }
+
+    private static async Task<Ok<VideoListModel>> GetVideos(
+        IVideoEndpointsService service,
+        ClaimsPrincipal user,
+        int page = 1,
+        int size = 10)
+    {
+        var model = await service.GetVideosAsync(page, size, user.GetUserId());
+        return TypedResults.Ok(model);
     }
 
     private static async Task<Results<Ok<object>, NotFound>> GetVideoDetail(

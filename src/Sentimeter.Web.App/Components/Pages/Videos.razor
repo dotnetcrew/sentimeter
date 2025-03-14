@@ -1,0 +1,23 @@
+﻿@page "/videos"
+@attribute [StreamRendering]
+@attribute [Authorize]
+
+<PageTitle>Sentimeter - My videos</PageTitle>
+
+<h1>My videos</h1>
+
+@if (loading)
+{
+    <ItemsPlaceholder />
+}
+else
+{
+    <div class="row">
+        @foreach (var video in model.Items)
+        {
+            <div class="col-md-3 mb-2">
+                <VideoListItem Video="video" />
+            </div>
+        }
+    </div>
+}

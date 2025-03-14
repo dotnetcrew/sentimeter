@@ -1,0 +1,19 @@
+﻿<div class="card">
+    @if (!string.IsNullOrEmpty(Video.ThumbnailUrl))
+    {
+        <img src="@Video.ThumbnailUrl" class="card-img-top" alt="@Video.Title" />
+    }
+
+    <div class="card-body">
+        <h5 class="card-title">@Video.Title</h5>
+        <div class="card-footer">
+            <a href="#" class="btn btn-primary">details</a>
+            <a href="https://www.youtube.com/watch?v=@Video.VideoIdentifier" class="btn btn-outline-primary">watch on YouTube</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public VideoListModel.VideoItemDescriptor Video { get; set; } = default!;
+}

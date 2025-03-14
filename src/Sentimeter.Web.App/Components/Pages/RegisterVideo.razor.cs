@@ -1,9 +1,10 @@
-﻿using Sentimeter.Web.App.Services;
+﻿using Microsoft.AspNetCore.Components;
+using Sentimeter.Web.App.Services;
 using Sentimeter.Web.Models;
 
 namespace Sentimeter.Web.App.Components.Pages;
 
-public partial class RegisterVideo(VideosApiClient videosApiClient)
+public partial class RegisterVideo(VideosApiClient videosApiClient, NavigationManager navigationManager)
 {
     private RegisterVideoModel model = new();
 
@@ -37,5 +38,6 @@ public partial class RegisterVideo(VideosApiClient videosApiClient)
     private async Task RegisterVideoAsync()
     {
         await videosApiClient.RegisterVideoAsync(model);
+        navigationManager.NavigateTo("/videos", forceLoad: true);
     }
 }
