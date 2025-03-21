@@ -20,7 +20,7 @@ public class YouTubeVideoRetriever(YouTubeService youtubeService) : IVideoRetrie
         }
 
         var publishedAt = videoItem.Snippet.PublishedAtDateTimeOffset;
-        var thumbnailUrl = videoItem.Snippet.Thumbnails.Standard.Url;
+        var thumbnailUrl = videoItem.Snippet.Thumbnails.Standard!= null ?videoItem.Snippet.Thumbnails.Standard.Url : videoItem.Snippet.Thumbnails.Default__.Url;
 
         return new DiscoveryVideoInformationResponseModel(
             videoItem.Snippet.Title,
@@ -35,9 +35,9 @@ public class YouTubeVideoRetriever(YouTubeService youtubeService) : IVideoRetrie
         var request = youtubeService.CommentThreads.List("snippet,replies");
         string? pageToken = null;
 
-        request.Order = CommentThreadsResource.ListRequest.OrderEnum.Relevance;  // Or Time???
+        request.Order = CommentThreadsResource.ListRequest.OrderEnum.Relevance; 
         request.VideoId = model.VideoIdentifier; 
-        request.MaxResults = model.MaxResults;
+        request.MaxResults = model.MaxResults; // Not function as expected!
 
         do
         {
@@ -55,11 +55,19 @@ public class YouTubeVideoRetriever(YouTubeService youtubeService) : IVideoRetrie
                 {
                     foreach (var reply in replies.Comments)
                     {
-                        lstReplies.Add(new Comment(reply.Id, reply.Snippet.AuthorDisplayName, reply.Snippet.TextDisplay, reply.Snippet.UpdatedAtDateTimeOffset, null));
+                        if (model.LastUpdate == null ||
+                            model.LastUpdate < reply.Snippet.UpdatedAtDateTimeOffset)
+                        {
+                            lstReplies.Add(new Comment(reply.Id, reply.Snippet.AuthorDisplayName, reply.Snippet.TextDisplay, reply.Snippet.UpdatedAtDateTimeOffset, null));
+                        }
                     }
                 }
-
-                lstComments.Add(new Comment(comment.Snippet.TopLevelComment.Id, comment.Snippet.TopLevelComment.Snippet.AuthorDisplayName, comment.Snippet.TopLevelComment.Snippet.TextDisplay, comment.Snippet.TopLevelComment.Snippet.UpdatedAtDateTimeOffset,lstReplies));
+                if (model.LastUpdate==null||
+                    model.LastUpdate < updatedAt ||
+                    lstReplies.Count > 0)
+                {
+                    lstComments.Add(new Comment(comment.Snippet.TopLevelComment.Id, comment.Snippet.TopLevelComment.Snippet.AuthorDisplayName, comment.Snippet.TopLevelComment.Snippet.TextDisplay, comment.Snippet.TopLevelComment.Snippet.UpdatedAtDateTimeOffset, lstReplies));
+                }
             }
 
         } while (pageToken is not null);

@@ -82,7 +82,7 @@ public class VideoEndpointsService : IVideoEndpointsService
         {
             Description = model.Description,
             Title = model.Title,
-            PublishedAt = model.PublishedAt,
+            PublishedAt = model.PublishedAt?.ToUniversalTime(),
             Identifier = model.VideoId,
             UserId = userId,
             ThumbnailUrl = model.ThumbnailUrl
