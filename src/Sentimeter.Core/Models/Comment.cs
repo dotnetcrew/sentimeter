@@ -14,5 +14,7 @@ public class Comment
 
     public virtual Video Video { get; set; } = default!;
 
+    public Guid VideoId { get; set; }
+
     public virtual IList<Comment> Replies { get; set; } = [];
 }

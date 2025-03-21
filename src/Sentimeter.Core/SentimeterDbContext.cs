@@ -27,6 +27,7 @@ public class SentimeterDbContext : DbContext
 
             builder.HasMany(v => v.Comments)
                 .WithOne(c => c.Video)
+                .HasForeignKey(c => c.VideoId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
