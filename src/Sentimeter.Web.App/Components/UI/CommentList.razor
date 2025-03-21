@@ -1,0 +1,24 @@
+﻿@rendermode InteractiveServer
+
+@if (!RendererInfo.IsInteractive || loading)
+{
+    <p>loading...</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var comment in model.Items)
+        {
+            <div class="col-md-12 mb-2">
+                <div class="card">
+                    <div class="card-header">
+                        @comment.Author:
+                    </div>
+                    <div class="card-body">
+                        @comment.Content
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

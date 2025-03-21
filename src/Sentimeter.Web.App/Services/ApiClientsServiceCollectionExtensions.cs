@@ -12,6 +12,11 @@ public static class ApiClientsServiceCollectionExtensions
             client.BaseAddress = new($"https+http://{ServiceNames.WebApi}/");
         }).AddHttpMessageHandler<SentimeterAuthorizationHandler>();
 
+        services.AddHttpClient<CommentsApiClient>(client =>
+        {
+            client.BaseAddress = new($"https+http://{ServiceNames.WebApi}/");
+        }).AddHttpMessageHandler<SentimeterAuthorizationHandler>();
+
         return services;
     }
 }

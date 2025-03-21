@@ -36,7 +36,9 @@ builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddYouTubeVideoRetriever(builder.Configuration["YOUTUBE_APIKEY"]!);
 
-builder.Services.AddScoped<IVideoEndpointsService, VideoEndpointsService>();
+builder.Services
+    .AddScoped<IVideoEndpointsService, VideoEndpointsService>()
+    .AddScoped<ICommentEndpointsService, CommentEndpointsService>();
 
 var app = builder.Build();
 
@@ -48,7 +50,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapVideoEndpoints();
+app
+    .MapVideoEndpoints()
+    .MapCommentEndpoints();
 
 app.MapDefaultEndpoints();
 

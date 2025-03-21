@@ -1,0 +1,44 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Sentimeter.Core;
+using Sentimeter.Web.Models.Comments;
+
+namespace Sentimeter.Web.Api.Services;
+
+public class CommentEndpointsService : ICommentEndpointsService
+{
+    private readonly SentimeterDbContext _context;
+
+    public CommentEndpointsService(SentimeterDbContext context)
+    {
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
+
+    public async Task<CommentListModel> GetCommentsAsync(Guid videoId, int page, int size)
+    {
+        var skip = (page - 1) * size;
+
+        var commentsQuery = _context.Comments.AsNoTracking()
+            .Where(x => x.VideoId == videoId);
+
+        var totalNumberOfComments = await commentsQuery.CountAsync();
+
+        var numberOfPages = (int)Math.Ceiling((double)totalNumberOfComments / size);
+
+        var comments = await commentsQuery
+            .Skip(skip)
+            .Take(size)
+            .Select(c => new CommentListModel.CommentItemDescriptor(
+                c.Id,
+                c.Author,
+                c.Content,
+                c.LastUpdate)).ToListAsync();
+
+        return new CommentListModel
+        {
+            Items = comments,
+            NumberOfPages = numberOfPages,
+            HasNextPage = page < numberOfPages,
+            IsFirstPage = page == 1
+        };
+    }
+}
