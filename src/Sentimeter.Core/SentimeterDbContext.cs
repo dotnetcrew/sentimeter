@@ -34,7 +34,7 @@ public class SentimeterDbContext : DbContext
         modelBuilder.Entity<Comment>(builder =>
         {
             builder.Property(c => c.Author).HasMaxLength(255).IsRequired();
-            builder.Property(c => c.Content).HasMaxLength(1024).IsRequired();
+            builder.Property(c => c.Content).IsRequired();
             builder.HasMany(c => c.Replies)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);

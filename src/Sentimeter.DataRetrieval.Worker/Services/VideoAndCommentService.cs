@@ -77,13 +77,8 @@ public class VideoAndCommentService : IVideoAndCommentService
 
         try
         {
-            var video = _context.Videos.Include(v => v.Comments).FirstOrDefault(v => v.Id == videoId);
-            if (video == null)
-            {
-                throw new Exception($"Video with Id {videoId} does not exist.");
-            }
 
-           // var res = _context.Comments.FirstOrDefault(c => c.Identifier == commentIdentifier);
+           var res = _context.Comments.Where( c => c.VideoId == videoId).FirstOrDefault(c => c.Identifier == commentIdentifier);
 
             if (res == null)
             {
@@ -94,7 +89,7 @@ public class VideoAndCommentService : IVideoAndCommentService
                     Identifier = commentIdentifier,
                     //LastUpdate = new DateTime (), // updatedAtDateTimeOffset.Value.DateTime,
                     //Replies
-                    Video = video
+                    VideoId = videoId
                 };
                 _context.Comments.Add(c);
             }
