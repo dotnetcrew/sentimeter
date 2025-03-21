@@ -79,7 +79,13 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
             {
                 foreach(var comment in result.comments)
                 {
-                    videoCommentsService.UpdateOrSaveVideoComment(message.VideoId, comment.CommentIdentifier, comment.AuthorDisplayName, comment.TextDisplay, comment.UpdatedAtDateTimeOffset);
+                    Guid newCommentId= videoCommentsService.UpdateOrSaveVideoComment(message.VideoId, comment.CommentIdentifier, null, comment.AuthorDisplayName, comment.TextDisplay, comment.UpdatedAtDateTimeOffset);
+                    
+                    foreach(var reply in comment.replies)
+                    {
+                        videoCommentsService.UpdateOrSaveVideoComment(message.VideoId, reply.CommentIdentifier, newCommentId, reply.AuthorDisplayName, reply.TextDisplay, reply.UpdatedAtDateTimeOffset);
+                    }
+
                     //LogInformation($"CommentId={.CommentId}, CommentDate={item.CommentDate}, CommentText={item.CommentText}");
                 }
 

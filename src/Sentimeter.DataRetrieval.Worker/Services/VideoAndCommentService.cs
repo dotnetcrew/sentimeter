@@ -19,7 +19,7 @@ public interface IVideoAndCommentService
     List<RetriveVideoCommentsMessage> RetriveNewVideoWithoutComments(int skipItemNum, int takeItemNum);
     string? GetVideoIdentifierFromId(Guid videoId);
     Guid? GetVideoIdFromVideoIdentifier(string identifier);
-    void UpdateOrSaveVideoComment(Guid videoId, string id, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset);
+    Guid UpdateOrSaveVideoComment(Guid videoId, string currentCommentIdentifier, Guid? replyCommentIdentifier, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset);
 }
 
 
@@ -72,13 +72,13 @@ public class VideoAndCommentService : IVideoAndCommentService
         return res == null ? null : res.Id;
     }
 
-    public void UpdateOrSaveVideoComment(Guid videoId, string commentIdentifier, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset)
+    public Guid UpdateOrSaveVideoComment(Guid videoId, string currentCommentIdentifier, Guid? replyCommentIdentifier, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset)
     {
-
+        Guid idComment = Guid.Empty;
         try
         {
 
-           var res = _context.Comments.Where( c => c.VideoId == videoId).FirstOrDefault(c => c.Identifier == commentIdentifier);
+           var res = _context.Comments.Where( c => c.VideoId == videoId).FirstOrDefault(c => c.Identifier == currentCommentIdentifier);
 
             if (res == null)
             {
@@ -86,15 +86,27 @@ public class VideoAndCommentService : IVideoAndCommentService
                 {
                     Author = authorDisplayName,
                     Content = textDisplay,
-                    Identifier = commentIdentifier,
-                    //LastUpdate = new DateTime (), // updatedAtDateTimeOffset.Value.DateTime,
-                    //Replies
+                    Identifier = currentCommentIdentifier,
+                    LastUpdate = updatedAtDateTimeOffset!=null?updatedAtDateTimeOffset.Value.UtcDateTime:null ,
+                    CommentId = replyCommentIdentifier,
                     VideoId = videoId
                 };
                 _context.Comments.Add(c);
+                _context.SaveChanges();
+                idComment = c.Id;
             }
-            
-            _context.SaveChanges();
+            else
+            {
+                // Check if the comment has been updated
+                if (updatedAtDateTimeOffset != null &&
+                    res.LastUpdate < updatedAtDateTimeOffset )
+                {
+                    res.Content = textDisplay;
+                    res.LastUpdate = updatedAtDateTimeOffset != null ? updatedAtDateTimeOffset.Value.UtcDateTime : null;
+                    _context.SaveChanges();
+                    idComment = res.Id;
+                }
+            }
 
         }
         catch (Exception ex)
@@ -103,5 +115,7 @@ public class VideoAndCommentService : IVideoAndCommentService
             Console.WriteLine(ex.Message);
 
         }
+
+        return idComment;
     }
 }

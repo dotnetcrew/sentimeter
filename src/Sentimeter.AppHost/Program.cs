@@ -28,7 +28,12 @@ var llama3 = ollama.AddModel("sentimeter-llama3", "llama3.2:1b");
 
 #region Database
 var postgres = builder.AddPostgres("sentimeter-postgres")
-    .WithPgAdmin(rb => rb.WithExplicitStart())
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithPgAdmin(rb =>
+    {
+        rb.WithExplicitStart();
+        rb.WithLifetime(ContainerLifetime.Persistent);
+    })
     .WithDataVolume("sentimeter-postgres-data");
 
 var db = postgres.AddDatabase("sentimeter-db");
