@@ -75,7 +75,8 @@ builder.AddProject<Sentimeter_DataRetrieval_Worker>("sentimeter-dataretrieval-wo
     .WithReference(db)
     .WithReference(rabbitmq)
     .WaitFor(db)
-    .WaitFor(rabbitmq);
+    .WaitFor(rabbitmq)
+    .WithEnvironment("YOUTUBE_APIKEY", youtubeApiKey);
 #endregion
 
 #region Support Migration Worker

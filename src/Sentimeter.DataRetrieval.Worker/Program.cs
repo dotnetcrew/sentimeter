@@ -1,6 +1,5 @@
 using Akka.Hosting;
 using Sentimeter.Core;
-using Sentimeter.DataRetrieval.Worker;
 using Sentimeter.DataRetrieval.Worker.Akka.Actors;
 using Sentimeter.DataRetrieval.Worker.Configuration;
 using Sentimeter.DataRetrieval.Worker.Services;
@@ -17,7 +16,7 @@ builder.AddMassTransitRabbitMq(
     options => options.DisableTelemetry = false,
     configuration =>
     {
-        configuration.AddConsumer<VideoPublishedConsumer>();
+        configuration.AddConsumer<SynchronizeVideoConsumer>();
     });
 
 builder.Services.Configure<DataRetrivalSettings>(builder.Configuration.GetSection(DataRetrivalSettings.JsonSection));
@@ -41,7 +40,7 @@ builder.Services.AddAkka("SentimeterActorSystem", (configurationBuilder, builder
 });
 
 // Read the YoutubeApiKey from user secrets
-var youtubeApiKey = builder.Configuration["YoutubeApiKey"];
+var youtubeApiKey = builder.Configuration["YOUTUBE_APIKEY"];
 builder.Services.AddYouTubeVideoRetriever(youtubeApiKey!);
 
 var host = builder.Build();

@@ -15,7 +15,7 @@ builder.AddMassTransitRabbitMq(
     "messaging",
     massTransitConfiguration: _ =>
     {
-        EndpointConvention.Map<VideoPublishedMessage>(new Uri("queue:video-published"));
+        EndpointConvention.Map<SynchronizeVideoMessage>(new Uri("queue:synchronize-video"));
     });
 
 // Add services to the container.
@@ -47,22 +47,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/test", async (IBus bus)  =>
-{
-    //var endpoint = await sendEndpointProvider.GetSendEndpoint(new Uri("queue:weather-forecast"));
-    //await endpoint.Send(new VideoPublishedMessage(1));
-
-    await bus.Send(new VideoPublishedMessage("B1IiYhBgEXU"));
-
-    return Results.Accepted();
-})
-.WithName("GetWeatherForecast");
 
 app.MapVideoEndpoints();
 

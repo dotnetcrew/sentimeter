@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Sentimeter.Core;
 using Sentimeter.Core.Models;
+using Sentimeter.Shared.Messages;
 using Sentimeter.Web.Models;
 
 namespace Sentimeter.Web.Api.Services;
@@ -9,9 +11,12 @@ public class VideoEndpointsService : IVideoEndpointsService
 {
     private readonly SentimeterDbContext _context;
 
-    public VideoEndpointsService(SentimeterDbContext context)
+    private readonly IBus _bus;
+
+    public VideoEndpointsService(SentimeterDbContext context, IBus bus)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _bus = bus ?? throw new ArgumentNullException(nameof(bus));
     }
 
     public async Task<VideoListModel> GetVideosAsync(int page, int size, string userId)
@@ -61,6 +66,12 @@ public class VideoEndpointsService : IVideoEndpointsService
 
         _context.Videos.Add(video);
         await _context.SaveChangesAsync();
+
+        var message = new SynchronizeVideoMessage(
+            video.Id,
+            video.Identifier);
+
+        await _bus.Send(message);
 
         return video.Id;
     }

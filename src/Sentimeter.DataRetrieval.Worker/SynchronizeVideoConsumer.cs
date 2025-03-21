@@ -1,19 +1,18 @@
 ﻿using Akka.Actor;
 using Akka.Hosting;
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
 using Sentimeter.DataRetrieval.Worker.Akka.Actors;
 using Sentimeter.DataRetrieval.Worker.Akka.Messages;
 using Sentimeter.DataRetrieval.Worker.Services;
 using Sentimeter.Shared.Messages;
 
-internal class VideoPublishedConsumer : IConsumer<VideoPublishedMessage>
+internal class SynchronizeVideoConsumer : IConsumer<SynchronizeVideoMessage>
 {
-    private readonly ILogger<VideoPublishedConsumer> _logger;
+    private readonly ILogger<SynchronizeVideoConsumer> _logger;
     private readonly IRequiredActor<ManagerWorkerActor> _managerWorkerActor;
     private readonly IVideoAndCommentService _videoAndCommentService;
 
-    public VideoPublishedConsumer(ILogger<VideoPublishedConsumer> logger,
+    public SynchronizeVideoConsumer(ILogger<SynchronizeVideoConsumer> logger,
         IRequiredActor<ManagerWorkerActor> managerWorkerActor,
         IVideoAndCommentService videoAndCommentService)
     {
@@ -21,7 +20,7 @@ internal class VideoPublishedConsumer : IConsumer<VideoPublishedMessage>
         _managerWorkerActor = managerWorkerActor;
         _videoAndCommentService = videoAndCommentService;
     }
-    public async Task Consume(ConsumeContext<VideoPublishedMessage> context)
+    public async Task Consume(ConsumeContext<SynchronizeVideoMessage> context)
     {
 
         _logger.LogInformation($"Video published: {context.Message.Identifier}");
