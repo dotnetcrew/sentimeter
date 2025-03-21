@@ -1,4 +1,5 @@
-﻿<div class="card">
+﻿@using Sentimeter.Web.Models.Videos
+<div class="card">
     @if (!string.IsNullOrEmpty(Video.ThumbnailUrl))
     {
         <img src="@Video.ThumbnailUrl" class="card-img-top" alt="@Video.Title" />

@@ -1,5 +1,5 @@
 ﻿using Sentimeter.Web.App.Services;
-using Sentimeter.Web.Models;
+using Sentimeter.Web.Models.Videos;
 
 namespace Sentimeter.Web.App.Components.Pages;
 

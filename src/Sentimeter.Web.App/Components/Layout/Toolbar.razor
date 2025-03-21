@@ -1,0 +1,21 @@
+﻿<div class="row">
+    <div class="col-md-9">
+        <h1>@Title</h1>
+    </div>
+    <div class="col-md-3 align-content-center">
+        @if (Actions != null)
+        {
+            <div class="d-flex justify-content-end">
+                @Actions
+            </div>
+        }
+
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+}

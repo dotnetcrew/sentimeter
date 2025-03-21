@@ -1,4 +1,4 @@
-﻿using Sentimeter.Web.Models;
+﻿using Sentimeter.Web.Models.Videos;
 
 namespace Sentimeter.Shared.Services;
 

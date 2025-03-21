@@ -4,7 +4,12 @@
 
 <PageTitle>Sentimeter - @(model?.Title ?? "Video detail")</PageTitle>
 
-<h1>@(model?.Title ?? "Video detail")</h1>
+<Toolbar Title="@(model?.Title ?? "Video detail")">
+    <Actions>
+        <a href="videos" class="btn btn-outline-primary">Back to my videos</a>
+    </Actions>
+</Toolbar>
+<hr/>
 
 @if (loading)
 {

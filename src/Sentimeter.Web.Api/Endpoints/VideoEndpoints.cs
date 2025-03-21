@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sentimeter.Shared.Services;
 using Sentimeter.Web.Api.Security;
 using Sentimeter.Web.Api.Services;
-using Sentimeter.Web.Models;
+using Sentimeter.Web.Models.Videos;
 using System.Security.Claims;
 
 namespace Sentimeter.Web.Api.Endpoints;

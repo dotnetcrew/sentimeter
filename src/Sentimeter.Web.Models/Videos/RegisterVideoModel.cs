@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sentimeter.Web.Models;
+namespace Sentimeter.Web.Models.Videos;
 
 public class RegisterVideoModel
 {

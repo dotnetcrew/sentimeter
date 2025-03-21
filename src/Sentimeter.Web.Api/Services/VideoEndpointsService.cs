@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sentimeter.Core;
 using Sentimeter.Core.Models;
 using Sentimeter.Shared.Messages;
-using Sentimeter.Web.Models;
+using Sentimeter.Web.Models.Videos;
 
 namespace Sentimeter.Web.Api.Services;
 

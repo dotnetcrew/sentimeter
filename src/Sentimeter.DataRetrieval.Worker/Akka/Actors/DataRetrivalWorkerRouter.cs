@@ -72,7 +72,7 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
         try
         {
             // Retrive comments using message.VideoId and check lastupdate if commnets !=null
-            var result = await videoRetriever.DiscoveryVideoCommmentsAsync(new Web.Models.DiscoveryVideoCommentsModel(message.Identifier, 100, message.CommentId.ToString(), message.CommentDate));
+            var result = await videoRetriever.DiscoveryVideoCommmentsAsync(new Web.Models.Videos.DiscoveryVideoCommentsModel(message.Identifier, 100, message.CommentId.ToString(), message.CommentDate));
 
             // ToDo : Update or save results
             if (result != null)
