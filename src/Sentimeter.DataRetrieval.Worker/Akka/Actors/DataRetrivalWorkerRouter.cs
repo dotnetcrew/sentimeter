@@ -1,5 +1,8 @@
 ﻿using Akka.Actor;
+using Akka.Streams.Dsl;
 using Sentimeter.DataRetrieval.Worker.Akka.Messages;
+using Sentimeter.DataRetrieval.Worker.Services;
+using Sentimeter.Shared.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +17,9 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
     public IStash Stash { get; set; }
 
     public DataRetrivalWorkerRouter(IServiceScopeFactory serviceScopeFactory, 
-        ILogger<DataRetrivalWorkerRouter> logger) : base(serviceScopeFactory, logger)
+        ILogger<DataRetrivalWorkerRouter> logger) 
+        : base(serviceScopeFactory, logger)
     {
-
         Become(WorkingEnabled);
     }
 
@@ -60,10 +63,37 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
     private async Task WorkingOperationMessageHandler(RetriveVideoCommentsMessage message)
     {
         LogInformation($"WorkingOperationMessageHandler: VideoId={message.VideoId}" );
-        LogInformation( message.CommentId != null ? $"CommentId={message.CommentId}, CommentDate={message.CommentDate}" : "No CommentId");    
+        LogInformation( message.CommentId != null ? $"CommentId={message.CommentId}, CommentDate={message.CommentDate}" : "No CommentId");
+        // Get services to work with DB (retrive videos, or videos and it's last commentId with lastUpdate?)
+        using var scope = ServiceScopeFactory.CreateScope();
+        var videoCommentsService = scope.ServiceProvider.GetRequiredService<IVideoAndCommentService>();
+        var videoRetriever = scope.ServiceProvider.GetRequiredService<IVideoRetriever>();
 
-        // ToDo: Retrive comments using message.VideoId and check lastupdate if commnets !=null
+        try
+        {
+            // Retrive comments using message.VideoId and check lastupdate if commnets !=null
+            var result = await videoRetriever.DiscoveryVideoCommmentsAsync(new Web.Models.DiscoveryVideoCommentsModel(message.Identifier, 100, message.CommentId.ToString(), message.CommentDate));
 
+            // ToDo : Update or save results
+            if (result != null)
+            {
+                foreach(var comment in result.comments)
+                {
+                    videoCommentsService.UpdateOrSaveVideoComment(message.VideoId, comment.CommentIdentifier, comment.AuthorDisplayName, comment.TextDisplay, comment.UpdatedAtDateTimeOffset);
+                    //LogInformation($"CommentId={.CommentId}, CommentDate={item.CommentDate}, CommentText={item.CommentText}");
+                }
+
+                
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            LogError($"Excetion into WorkingOperationMessageHandler: {ex.Message} ");
+        }
+
+        
     }
 
 }

@@ -8,3 +8,20 @@ public record DiscoveryVideoInformationResponseModel(
     string? Description,
     DateTime? PublishedAt,
     string ThumbnailUrl);
+
+public record Comment(
+    string CommentIdentifier,
+    string AuthorDisplayName,
+    string TextDisplay,
+    DateTimeOffset? UpdatedAtDateTimeOffset,
+    List<Comment>? replies
+    );
+
+public record DiscoveryVideoCommentsModel(
+    string VideoIdentifier,
+    uint MaxResults,
+    string? LastCommentId,
+    DateTimeOffset? LastUpdate
+    );
+
+public record DiscoveryVideoCommentsResponseModel(List<Comment> comments);

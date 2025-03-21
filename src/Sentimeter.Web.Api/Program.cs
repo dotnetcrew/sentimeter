@@ -58,7 +58,7 @@ app.MapGet("/test", async (IBus bus)  =>
     //var endpoint = await sendEndpointProvider.GetSendEndpoint(new Uri("queue:weather-forecast"));
     //await endpoint.Send(new VideoPublishedMessage(1));
 
-    await bus.Send(new VideoPublishedMessage(Guid.NewGuid()));
+    await bus.Send(new VideoPublishedMessage("B1IiYhBgEXU"));
 
     return Results.Accepted();
 })

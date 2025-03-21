@@ -11,12 +11,15 @@ public class RetriveVideoCommentsMessage
     
     public Guid VideoId { get; }
 
+    public string Identifier { get; }
+
     public Guid? CommentId { get; }
     public DateTimeOffset? CommentDate { get; }
 
 
-    public RetriveVideoCommentsMessage(Guid videoId, Guid? commentId, DateTimeOffset? commentDate)
+    public RetriveVideoCommentsMessage(string identifier, Guid videoId, Guid? commentId, DateTimeOffset? commentDate)
     {
+        Identifier = identifier;
         VideoId = videoId;
         CommentId = commentId;
         CommentDate = commentDate;

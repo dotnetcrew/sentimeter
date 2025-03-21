@@ -1,3 +1,3 @@
 ﻿namespace Sentimeter.Shared.Messages;
 
-public record VideoPublishedMessage(Guid VideoId);
+public record VideoPublishedMessage(string Identifier);

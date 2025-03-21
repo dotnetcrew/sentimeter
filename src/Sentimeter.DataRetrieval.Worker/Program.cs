@@ -5,6 +5,7 @@ using Sentimeter.DataRetrieval.Worker.Akka.Actors;
 using Sentimeter.DataRetrieval.Worker.Configuration;
 using Sentimeter.DataRetrieval.Worker.Services;
 using Sentimeter.Shared;
+using Sentimeter.Shared.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -26,7 +27,7 @@ builder.Services.AddScoped<IVideoAndCommentService, VideoAndCommentService>();
 builder.Services.AddAkka("SentimeterActorSystem", (configurationBuilder, builder) =>
 {
     configurationBuilder.ConfigureLoggers(configBuilder => { configBuilder.AddLoggerFactory(builder.GetRequiredService<ILoggerFactory>()); });
-    configurationBuilder.WithActors( (system, registry, resolver) =>
+    configurationBuilder.WithActors((system, registry, resolver) =>
     {
         var propsManagerWorkerActor = resolver.Props<ManagerWorkerActor>();
         var ManagerWorkerActor = system.ActorOf(propsManagerWorkerActor, "DataRetrival_ManagerWorkerActor");
@@ -39,7 +40,9 @@ builder.Services.AddAkka("SentimeterActorSystem", (configurationBuilder, builder
     });
 });
 
-//builder.Services.AddHostedService<Worker>();
+// Read the YoutubeApiKey from user secrets
+var youtubeApiKey = builder.Configuration["YoutubeApiKey"];
+builder.Services.AddYouTubeVideoRetriever(youtubeApiKey!);
 
 var host = builder.Build();
 host.Run();
