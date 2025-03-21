@@ -41,4 +41,10 @@ public class VideosApiClient(HttpClient httpClient)
         var model = await httpClient.GetFromJsonAsync<VideoListModel>($"{ResourceEndpoint}?page={page}&size={size}");
         return model ?? new();
     }
+
+    public async Task<VideoDetailModel?> GetVideoDetailAsync(Guid videoId)
+    {
+        var model = await httpClient.GetFromJsonAsync<VideoDetailModel>($"{ResourceEndpoint}/{videoId}");
+        return model;
+    }
 }

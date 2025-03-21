@@ -1,0 +1,37 @@
+﻿@page "/videos/{id:guid}"
+
+@attribute [StreamRendering]
+
+<PageTitle>Sentimeter - @(model?.Title ?? "Video detail")</PageTitle>
+
+<h1>@(model?.Title ?? "Video detail")</h1>
+
+@if (loading)
+{
+    <h2>Loading video....</h2>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>@model!.Description</p>
+                    @if (model.PublishedAt.HasValue)
+                    {
+                        <p>Published at: @model.PublishedAt.Value.ToShortDateString()</p>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(model!.Identifier))
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <iframe style="width: 100%; aspect-ratio: 16/9;" src="https://www.youtube.com/embed/@model.Identifier" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

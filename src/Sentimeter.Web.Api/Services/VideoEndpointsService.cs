@@ -19,6 +19,30 @@ public class VideoEndpointsService : IVideoEndpointsService
         _bus = bus ?? throw new ArgumentNullException(nameof(bus));
     }
 
+    public async Task<VideoDetailModel?> GetVideoDetailAsync(Guid videoId, string userId)
+    {
+        var video = await _context.Videos.AsNoTracking()
+            .Where(v => v.UserId == userId)
+            .SingleOrDefaultAsync(v => v.Id == videoId);
+
+        if (video is null)
+        {
+            return null;
+        }
+
+        var model = new VideoDetailModel
+        {
+            Description = video.Description,
+            Title = video.Title,
+            PublishedAt = video.PublishedAt,
+            ThumbnailUrl = video.ThumbnailUrl,
+            Identifier = video.Identifier,
+            Id = video.Id
+        };
+
+        return model;
+    }
+
     public async Task<VideoListModel> GetVideosAsync(int page, int size, string userId)
     {
         var skip = (page - 1) * size;

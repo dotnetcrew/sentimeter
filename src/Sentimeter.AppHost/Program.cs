@@ -3,6 +3,10 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+#region Parameters
+var youtubeApiKey = builder.AddParameter("YoutubeApiKey", secret: true);
+#endregion
+
 #region OLlama
 var ollama = builder.AddOllama("sentimeter-ollama")
     .WithDataVolume("sentimeter-ollama-data")
@@ -43,8 +47,6 @@ var rabbitmq = builder.AddRabbitMQ("messaging")
 #endregion
 
 #region Web Api
-var youtubeApiKey = builder.AddParameter("YoutubeApiKey", secret: true);
-
 var webApi = builder.AddProject<Sentimeter_Web_Api>("sentimeter-webapi")
     .WithReference(identity)
     .WithReference(rabbitmq)

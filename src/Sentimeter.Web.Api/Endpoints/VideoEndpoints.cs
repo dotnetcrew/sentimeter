@@ -44,12 +44,18 @@ internal static class VideoEndpoints
         return TypedResults.Ok(model);
     }
 
-    private static async Task<Results<Ok<object>, NotFound>> GetVideoDetail(
+    private static async Task<Results<Ok<VideoDetailModel>, NotFound>> GetVideoDetail(
         IVideoEndpointsService service,
         ClaimsPrincipal user,
         Guid id)
     {
-        throw new NotImplementedException();
+        var model = await service.GetVideoDetailAsync(id, user.GetUserId());
+        if (model is null)
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok(model);
     }
 
     private static async Task<Results<CreatedAtRoute<RegisterVideoModel>, BadRequest>> RegisterVideo(
