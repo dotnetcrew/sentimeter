@@ -15,7 +15,7 @@ public class DataRetrivalSettings
     /// <summary>
     /// Schedule every interval
     /// </summary>
-    public int SchedulerIntervalSeconds { get; set; } = 180;
+    public int SchedulerIntervalSeconds { get; set; } = 600;
 
     /// <summary>
     /// Items to consider at each schedule

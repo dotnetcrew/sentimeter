@@ -1,10 +1,10 @@
 using MassTransit;
-using Sentimeter.Shared.Messages;
 using Sentimeter.Web.Api.Endpoints;
 using Sentimeter.Shared.Services;
 using Sentimeter.Web.Api.Services;
 using Sentimeter.Core;
 using Sentimeter.Shared;
+using Sentimeter.Shared.Messages.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 

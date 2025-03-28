@@ -71,7 +71,7 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
 
         try
         {
-            // Retrive comments using message.VideoId and check lastupdate if commnets !=null
+            // Retrive comments using message.VideoId and check lastupdate if comments !=null
             var result = await videoRetriever.DiscoveryVideoCommmentsAsync(new Web.Models.Videos.DiscoveryVideoCommentsModel(message.Identifier, 100, message.CommentId.ToString(), message.CommentDate));
 
             if (result != null && 
@@ -90,7 +90,7 @@ internal class DataRetrivalWorkerRouter : ReceiverBaseActor, IWithTimers, IWithU
         }
         catch (Exception ex)
         {
-            LogError($"Excetion into WorkingOperationMessageHandler: {ex.Message} ");
+            LogError($"Exception into WorkingOperationMessageHandler: {ex.Message} ");
         }
 
         

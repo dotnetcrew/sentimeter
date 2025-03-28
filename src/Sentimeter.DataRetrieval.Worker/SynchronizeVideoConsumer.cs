@@ -4,7 +4,7 @@ using MassTransit;
 using Sentimeter.DataRetrieval.Worker.Akka.Actors;
 using Sentimeter.DataRetrieval.Worker.Akka.Messages;
 using Sentimeter.DataRetrieval.Worker.Services;
-using Sentimeter.Shared.Messages;
+using Sentimeter.Shared.Messages.RabbitMQ;
 
 internal class SynchronizeVideoConsumer : IConsumer<SynchronizeVideoMessage>
 {
