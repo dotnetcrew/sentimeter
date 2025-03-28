@@ -39,5 +39,25 @@ public class SentimeterDbContext : DbContext
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<VideoSentimentResult>(builder =>
+        {
+            builder.Property(v => v.Result).IsRequired();
+            builder.HasOne(v => v.Video)
+                .WithOne()
+                .HasForeignKey<VideoSentimentResult>(v => v.VideoId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<CommentSentimentResult>(builder =>
+        {
+            builder.Property(c => c.Result).IsRequired();
+            builder.HasOne(c => c.Comment)
+                .WithOne()
+                .HasForeignKey<CommentSentimentResult>(c => c.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
     }
 }
