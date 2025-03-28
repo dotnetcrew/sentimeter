@@ -1,4 +1,6 @@
 using Microsoft.Extensions.AI;
+using Sentimeter.Analysis.Worker.Services;
+using Sentimeter.Core;
 using System.Diagnostics;
 
 namespace Sentimeter.Analysis.Worker;
@@ -6,28 +8,34 @@ namespace Sentimeter.Analysis.Worker;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private readonly IServiceProvider _serviceProvider;
     private readonly IChatClient _client;
-
-    public Worker(ILogger<Worker> logger, IChatClient client)
+    
+    public Worker(ILogger<Worker> logger,
+        IServiceProvider serviceProvider,
+        IChatClient client/*,
+        IVideoAndCommentResult videoAndCommentResult*/)
     {
         _logger = logger;
+        _serviceProvider = serviceProvider;
         _client = client;
+        //_videoAndCommentResult = videoAndCommentResult;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        //while (!stoppingToken.IsCancellationRequested)
-        //{
-        //    if (_logger.IsEnabled(LogLevel.Information))
-        //    {
-        //        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-        //    }
-        //    await Task.Delay(1000, stoppingToken);
-        //}
+        // ToDO: Implement the logic to analyze the sentiment of the comments
+        //  Retrive comments from the database
+        //  For each comment, classify the sentiment as 'positive', 'negative' or 'neutral'
 
-        
+        using var scope = _serviceProvider.CreateScope();
+        var videoAndCommentResult = scope.ServiceProvider.GetRequiredService<IVideoAndCommentResult>();
+
+
+
         //Test to instruct the AI to classify the sentiment of a comment as 'positive', 'negative' or 'neutral' using System User and Assistant roles
-        
+        // Do it into constructor or first execution time !
+
         List<ChatMessage> messageHistory = [new ChatMessage(ChatRole.System, "Classifica il sentiment del seguente commento come 'positivo', 'negativo' o 'neutro'. Il sentiment è positivo se il commento esprime approvazione, entusiasmo o soddisfazione; è negativo se contiene critiche, insoddisfazione o disapprovazione; è neutro se è oggettivo, ambiguo o privo di emozioni forti. Restituisci solo il JSON contenente la classe identificata in questo formato { “sentiment”: “classe“, ”score”: ”numero score” } dove “classe” è il valore del sentiment classificato e lo score contiene un valore tra 0 e 1 che esprime la percentuale di confidenza della classificazione."),
                                                         new (ChatRole.User, "Analizza il commento seguente: Adoro questo prodotto! La qualità è eccellente, la spedizione è stata rapidissima e il servizio clienti è stato super disponibile. Lo consiglio assolutamente!"),
                                                         new (ChatRole.Assistant, """{"sentiment":"positivo", "score": 0.87}"""),

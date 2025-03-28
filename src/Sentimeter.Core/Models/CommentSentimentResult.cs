@@ -1,6 +1,6 @@
 ﻿namespace Sentimeter.Core.Models;
 
-class CommentSentimentResult
+public class CommentSentimentResult
 {
     public Guid Id { get; set; }
     public Guid CommentId { get; set; }

@@ -80,7 +80,7 @@ public class VideoEndpointsService : IVideoEndpointsService
     {
         var video = new Video
         {
-            Description = model.Description,
+            Description = model.Description?.Length > 1024 ? model.Description.Substring(0, 1024) : model.Description,
             Title = model.Title,
             PublishedAt = model.PublishedAt?.ToUniversalTime(),
             Identifier = model.VideoId,

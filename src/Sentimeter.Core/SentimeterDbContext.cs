@@ -14,6 +14,10 @@ public class SentimeterDbContext : DbContext
 
     public DbSet<Comment> Comments { get; set; } = default!;
 
+    public DbSet<VideoSentimentResult> VideoSentimentResult { get; set; } = default!;
+
+    public DbSet<CommentSentimentResult> CommentSentimentResult { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

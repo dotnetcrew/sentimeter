@@ -1,6 +1,6 @@
 ﻿namespace Sentimeter.Core.Models;
 
-class VideoSentimentResult
+public class VideoSentimentResult
 {
     public Guid Id { get; set; }
     public Guid VideoId { get; set; }

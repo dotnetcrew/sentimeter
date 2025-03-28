@@ -8,6 +8,7 @@ using Sentimeter.DataRetrieval.Worker.Akka.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,8 @@ public interface IVideoAndCommentService
     string? GetVideoIdentifierFromId(Guid videoId);
     Guid? GetVideoIdFromVideoIdentifier(string identifier);
     Guid UpdateOrSaveVideoComment(Guid videoId, string currentCommentIdentifier, Guid? replyCommentIdentifier, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset);
+    List<Comment> GetAllCommentsWithoutResponse();
+    List<Comment> GetAllComments();
 }
 
 
@@ -72,6 +75,17 @@ public class VideoAndCommentService : IVideoAndCommentService
         return res == null ? null : res.Id;
     }
 
+    public List<Comment> GetAllCommentsWithoutResponse()
+    {
+        return _context.Comments.Where(c => c.CommentId == null).OrderBy(x=>x.Identifier).ToList();
+    }
+
+    public List<Comment> GetAllComments()
+    {
+        return _context.Comments.OrderBy(x => x.Identifier).ToList();
+    }
+
+
     public Guid UpdateOrSaveVideoComment(Guid videoId, string currentCommentIdentifier, Guid? replyCommentIdentifier, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset)
     {
         Guid idComment = Guid.Empty;
@@ -85,7 +99,7 @@ public class VideoAndCommentService : IVideoAndCommentService
                 var c = new Comment
                 {
                     Author = authorDisplayName,
-                    Content = textDisplay,
+                    Content = WebUtility.HtmlDecode(textDisplay),
                     Identifier = currentCommentIdentifier,
                     LastUpdate = updatedAtDateTimeOffset!=null?updatedAtDateTimeOffset.Value.UtcDateTime:null ,
                     CommentId = replyCommentIdentifier,
