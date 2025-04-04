@@ -1,4 +1,5 @@
-﻿using Sentimeter.Analysis.Worker.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Sentimeter.Analysis.Worker.Models;
 using Sentimeter.Core;
 using Sentimeter.Core.Models;
 using System;
@@ -12,8 +13,13 @@ namespace Sentimeter.Analysis.Worker.Services
 
     public interface IVideoAndCommentResult
     {
-        Task<Guid> SaveVideoResult(VideoResultModel videoResult);
-        Task<Guid> SaveCommentResult(CommentResultModel videoResult);
+        Task<Guid> SaveVideoResultAsync(VideoResultModel videoResult);
+        Task<Guid> SaveCommentResultAsync(CommentResultModel videoResult);
+
+        public List<Comment> GetAllCommentsByVideoId(Guid videoId);
+        public List<Comment> GetAllCommentsWithoutResultByVideoId(Guid videoId);
+
+        public List<Video> GetAllVideos();
     }
     public class VideoAndCommentResultService : IVideoAndCommentResult
     {
@@ -25,7 +31,7 @@ namespace Sentimeter.Analysis.Worker.Services
             _context = ctx;
         }
 
-        public async Task<Guid> SaveVideoResult(VideoResultModel videoResult)
+        public async Task<Guid> SaveVideoResultAsync(VideoResultModel videoResult)
         {
 
             var result = new VideoSentimentResult
@@ -40,7 +46,7 @@ namespace Sentimeter.Analysis.Worker.Services
             return result.Id;
         }
 
-        public async Task<Guid> SaveCommentResult(CommentResultModel videoResult)
+        public async Task<Guid> SaveCommentResultAsync(CommentResultModel videoResult)
         {
 
             var result = new CommentSentimentResult
@@ -48,11 +54,17 @@ namespace Sentimeter.Analysis.Worker.Services
                 CommentId  = videoResult.CommentId,
                 Result = videoResult.Result,
                 LastUpdate = videoResult.LastUpdate,
+                Score = videoResult.Score
             };
 
             _context.CommentSentimentResult.Add(result);
             await _context.SaveChangesAsync();
             return result.Id;
+        }
+
+        public List<Video> GetAllVideos()
+        {
+            return _context.Videos.AsNoTracking().OrderBy(x => x.Id).ToList();
         }
 
 
@@ -61,9 +73,13 @@ namespace Sentimeter.Analysis.Worker.Services
             return _context.Comments.Where(c => c.VideoId == videoId).OrderBy(x => x.Id).ToList();
         }
 
-        public List<Comment> GetAllCommentsResultByVideoId(Guid videoId)
+        public List<Comment> GetAllCommentsWithoutResultByVideoId(Guid videoId)
         {
-            return _context.Comments.OrderBy(x => x.Identifier).ToList();
+            return _context.Comments
+                .Include(c => c.SentimentResult)
+                .Where(c => c.VideoId == videoId && c.SentimentResult == null )
+                .OrderBy(x => x.Id).ToList();
+
         }
 
     }

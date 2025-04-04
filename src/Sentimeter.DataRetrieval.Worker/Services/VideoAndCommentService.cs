@@ -1,4 +1,5 @@
 ﻿using Akka.Streams.Implementation.Fusing;
+using Akka.Streams.Stage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
 using Sentimeter.Core;
@@ -105,6 +106,13 @@ public class VideoAndCommentService : IVideoAndCommentService
                 {
                     res.Content = textDisplay;
                     res.LastUpdate = updatedAtDateTimeOffset != null ? updatedAtDateTimeOffset.Value.UtcDateTime : null;
+
+                    // Remove result!
+                    if(res.SentimentResult != null)
+                    {
+                        _context.CommentSentimentResult.Remove(res.SentimentResult);
+                        //res.SentimentResult = null;
+                    }
                     _context.SaveChanges();
                     idComment = res.Id;
                 }

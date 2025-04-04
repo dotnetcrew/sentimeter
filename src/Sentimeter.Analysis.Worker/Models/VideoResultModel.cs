@@ -18,5 +18,6 @@ namespace Sentimeter.Analysis.Worker.Models
         [Required]
         public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
 
+        public double Score { get; set; } = 0.0;
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sentimeter.Core;
@@ -11,9 +12,11 @@ using Sentimeter.Core;
 namespace Sentimeter.Core.Migrations
 {
     [DbContext(typeof(SentimeterDbContext))]
-    partial class SentimeterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404144850_AddNullableProperty")]
+    partial class AddNullableProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,9 +78,6 @@ namespace Sentimeter.Core.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Score")
-                        .HasColumnType("double precision");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CommentId")
@@ -134,9 +134,6 @@ namespace Sentimeter.Core.Migrations
                     b.Property<string>("Result")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("double precision");
 
                     b.Property<Guid>("VideoId")
                         .HasColumnType("uuid");

@@ -20,5 +20,5 @@ public class Comment
 
     public virtual IList<Comment> Replies { get; set; } = [];
 
-    public virtual CommentSentimentResult SentimentResult  { get; set; } = default;
+    public virtual CommentSentimentResult? SentimentResult  { get; set; } = default;
 }

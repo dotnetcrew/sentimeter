@@ -21,5 +21,5 @@ public class Video
 
     public virtual IList<Comment> Comments { get; set; } = [];
     
-    public virtual VideoSentimentResult SentimentResult { get; set; } = default;
+    public virtual VideoSentimentResult? SentimentResult { get; set; } = default;
 }
