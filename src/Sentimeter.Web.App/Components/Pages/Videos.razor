@@ -1,4 +1,4 @@
-﻿@page "/videos"
+﻿@page "/videos/{page:int?}"
 @attribute [StreamRendering]
 @attribute [Authorize]
 
@@ -24,5 +24,24 @@ else
                 <VideoListItem Video="video" />
             </div>
         }
+    </div>
+    <div class="nav">
+        <ul class="pagination">
+            <li class="page-item align-content-center px-2">
+                page <strong>@Page</strong> of <strong>@model.NumberOfPages</strong>
+            </li>
+            <li class="page-item@(model.IsFirstPage ? " disabled" : "")">
+                <a class="page-link" href="videos/@(Page - 1)">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span>prev</span>
+                </a>
+            </li>
+            <li class="page-item@(model.HasNextPage ? "" : " disabled")">
+                <a class="page-link" href="videos/@(Page + 1)">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span>next</span>
+                </a>
+            </li>
+        </ul>
     </div>
 }
