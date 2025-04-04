@@ -11,6 +11,9 @@ public partial class RegisterVideo(VideosApiClient videosApiClient, NavigationMa
     private bool loadingVideoInformation = false;
     private string? loadingVideoInformationErrorMessage;
 
+    private bool registeringVideo = false;
+    private string? registeringVideoErrorMessage;
+
     private async Task DiscoveryVideoInformationAsync()
     {
         loadingVideoInformation = true;
@@ -19,15 +22,15 @@ public partial class RegisterVideo(VideosApiClient videosApiClient, NavigationMa
         try
         {
             var videoInformation = await videosApiClient.DiscoveryVideoInformationAsync(new(model.VideoId));
+            if (!videoInformation.Success)
+            {
+                loadingVideoInformationErrorMessage = videoInformation.ErrorMessage;
+            }
 
-            model.Title = videoInformation.Title;
-            model.Description = videoInformation.Description;
-            model.PublishedAt = videoInformation.PublishedAt;
-            model.ThumbnailUrl = videoInformation.ThumbnailUrl;
-        }
-        catch (InvalidOperationException ex)
-        {
-            loadingVideoInformationErrorMessage = ex.Message;
+            model.Title = videoInformation.Content!.Title;
+            model.Description = videoInformation.Content!.Description;
+            model.PublishedAt = videoInformation.Content!.PublishedAt;
+            model.ThumbnailUrl = videoInformation.Content!.ThumbnailUrl;
         }
         finally
         {
@@ -37,7 +40,24 @@ public partial class RegisterVideo(VideosApiClient videosApiClient, NavigationMa
 
     private async Task RegisterVideoAsync()
     {
-        await videosApiClient.RegisterVideoAsync(model);
-        navigationManager.NavigateTo("/videos", forceLoad: true);
+        registeringVideoErrorMessage = null;
+        registeringVideo = true;
+
+        try
+        {
+            var result = await videosApiClient.RegisterVideoAsync(model);
+
+            if (result.Success)
+            {
+                navigationManager.NavigateTo("/videos", forceLoad: true);
+                return;
+            }
+
+            registeringVideoErrorMessage = result.ErrorMessage;
+        }
+        finally
+        {
+            registeringVideo = false;
+        }
     }
 }

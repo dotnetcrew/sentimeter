@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MinimalHelpers.Validation;
 using Sentimeter.Shared.Services;
 using Sentimeter.Web.Api.Security;
 using Sentimeter.Web.Api.Services;
@@ -29,7 +30,8 @@ internal static class VideoEndpoints
 
         videoGroup.MapPost("", RegisterVideo)
             .WithOpenApi()
-            .WithName(nameof(RegisterVideo));
+            .WithName(nameof(RegisterVideo))
+            .WithValidation<RegisterVideoModel>();
 
         return builder;
     }
@@ -58,7 +60,7 @@ internal static class VideoEndpoints
         return TypedResults.Ok(model);
     }
 
-    private static async Task<Results<CreatedAtRoute<RegisterVideoModel>, BadRequest>> RegisterVideo(
+    private static async Task<Results<CreatedAtRoute<RegisterVideoModel>, BadRequest, ValidationProblem>> RegisterVideo(
         IVideoEndpointsService service,
         ClaimsPrincipal user,
         [FromBody] RegisterVideoModel model)
@@ -67,20 +69,18 @@ internal static class VideoEndpoints
         return TypedResults.CreatedAtRoute(model, nameof(GetVideoDetail), new { id = videoId });
     }
 
-    private static async Task<Results<Ok<DiscoveryVideoInformationResponseModel>, BadRequest<string>>> DiscoveryVideoInformation(
+    private static async Task<Results<Ok<DiscoveryVideoInformationResponseModel>, ValidationProblem>> DiscoveryVideoInformation(
         IVideoRetriever videoRetriever,
         ClaimsPrincipal user,
         [FromBody] DiscoveryVideoInformationModel model)
     {
-        if (string.IsNullOrWhiteSpace(model.VideoId))
-        {
-            return TypedResults.BadRequest("VideoId is required.");
-        }
-
         var videoInformation = await videoRetriever.DiscoveryVideoInformationAsync(model);
         if (videoInformation == null)
         {
-            return TypedResults.BadRequest("Video not found.");
+            return TypedResults.ValidationProblem(new Dictionary<string, string[]> 
+            { 
+                [nameof(model.VideoId)] = ["Video not found"] 
+            });
         }
 
         return TypedResults.Ok(videoInformation);

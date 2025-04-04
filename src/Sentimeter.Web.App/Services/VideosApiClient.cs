@@ -1,4 +1,5 @@
-﻿using Sentimeter.Web.Models.Videos;
+﻿using OperationResults;
+using Sentimeter.Web.Models.Videos;
 
 namespace Sentimeter.Web.App.Services;
 
@@ -6,34 +7,38 @@ public class VideosApiClient(HttpClient httpClient)
 {
     private const string ResourceEndpoint = "api/videos";
 
-    public async Task<DiscoveryVideoInformationResponseModel> DiscoveryVideoInformationAsync(DiscoveryVideoInformationModel model)
+    public async Task<Result<DiscoveryVideoInformationResponseModel>> DiscoveryVideoInformationAsync(DiscoveryVideoInformationModel model)
     {
-        try
+        var response = await httpClient.PostAsJsonAsync($"{ResourceEndpoint}/discovery", model);
+        if (!response.IsSuccessStatusCode)
         {
-            var response = await httpClient.PostAsJsonAsync($"{ResourceEndpoint}/discovery", model);
-            response.EnsureSuccessStatusCode();
+            var error = await response.Content.ReadFromJsonAsync<HttpValidationProblemDetails>();
+            var errors = error?.Errors
+                .Select(x => new ValidationError(x.Key, x.Value.FirstOrDefault() ?? string.Empty))
+                .ToArray() ?? [];
 
-            var responseModel = await response.Content.ReadFromJsonAsync<DiscoveryVideoInformationResponseModel>();
-            return responseModel!;
+            return Result.Fail(FailureReasons.ClientError, "There was an error while retrieving video informations", errors);
         }
-        catch (HttpRequestException ex)
-        {
-            throw new InvalidOperationException(ex.Message);
-        }
-        
+
+        var responseModel = await response.Content.ReadFromJsonAsync<DiscoveryVideoInformationResponseModel>();
+        return responseModel!;
+
     }
 
-    public async Task RegisterVideoAsync(RegisterVideoModel model)
+    public async Task<Result> RegisterVideoAsync(RegisterVideoModel model)
     {
-        try
+        var response = await httpClient.PostAsJsonAsync(ResourceEndpoint, model);
+        if (!response.IsSuccessStatusCode)
         {
-            var response = await httpClient.PostAsJsonAsync(ResourceEndpoint, model);
-            response.EnsureSuccessStatusCode();
+            var error = await response.Content.ReadFromJsonAsync<HttpValidationProblemDetails>();
+            var errors = error?.Errors
+                .Select(x => new ValidationError(x.Key, x.Value.FirstOrDefault() ?? string.Empty))
+                .ToArray() ?? [];
+
+            return Result.Fail(FailureReasons.ClientError, "There was an error while registering the informations of the video", errors);
         }
-        catch (HttpRequestException ex)
-        {
-            throw new InvalidOperationException(ex.Message);
-        }
+
+        return Result.Ok();
     }
 
     public async Task<VideoListModel> GetVideosAsync(int page, int size)

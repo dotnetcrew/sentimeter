@@ -1,7 +1,9 @@
-﻿namespace Sentimeter.Web.Models.Videos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Sentimeter.Web.Models.Videos;
 
 public record DiscoveryVideoInformationModel(
-    string VideoId);
+    [Required] string VideoId);
 
 public record DiscoveryVideoInformationResponseModel(
     string Title,

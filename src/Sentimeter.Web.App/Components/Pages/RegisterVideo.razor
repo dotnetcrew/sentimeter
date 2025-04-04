@@ -22,6 +22,15 @@ else
             <EditForm Model="model" role="form" OnValidSubmit="RegisterVideoAsync">
                 <DataAnnotationsValidator />
 
+                @if (!string.IsNullOrEmpty(registeringVideoErrorMessage))
+                {
+                    <div class="mb-2">
+                        <div class="alert alert-danger">
+                            @registeringVideoErrorMessage
+                        </div>
+                    </div>
+                }
+
                 <div class="mb-2">
                     <label>Video URL</label>
                     <div class="input-group">
@@ -38,7 +47,7 @@ else
                 @if (loadingVideoInformation)
                 {
                     <div class="mb-2">
-                        <p>loading video information...</p>
+                        <small>loading video information...</small>
                     </div>
                 }
                 else if (!string.IsNullOrEmpty(loadingVideoInformationErrorMessage))
@@ -66,10 +75,26 @@ else
                 </div>
 
                 <div class="mb-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    <button type="submit"
+                            class="btn btn-primary btn-lg"
+                            disabled="@registeringVideo">
+                        @if (!registeringVideo)
+                        {
+                            <span>Register</span>
+                        }
+                        else
+                        {
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Saving...</span>
+                        }
+                    </button>
+
                 </div>
+
             </EditForm>
+
         </div>
+
         <div class="col-md-4">
             @if (!string.IsNullOrEmpty(model.VideoId))
             {
