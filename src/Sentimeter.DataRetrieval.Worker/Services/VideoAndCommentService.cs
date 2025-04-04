@@ -21,8 +21,6 @@ public interface IVideoAndCommentService
     string? GetVideoIdentifierFromId(Guid videoId);
     Guid? GetVideoIdFromVideoIdentifier(string identifier);
     Guid UpdateOrSaveVideoComment(Guid videoId, string currentCommentIdentifier, Guid? replyCommentIdentifier, string authorDisplayName, string textDisplay, DateTimeOffset? updatedAtDateTimeOffset);
-    List<Comment> GetAllCommentsWithoutResponse();
-    List<Comment> GetAllComments();
 }
 
 
@@ -73,16 +71,6 @@ public class VideoAndCommentService : IVideoAndCommentService
         var res = _context.Videos.FirstOrDefault(v => v.Identifier == identifier);
 
         return res == null ? null : res.Id;
-    }
-
-    public List<Comment> GetAllCommentsWithoutResponse()
-    {
-        return _context.Comments.Where(c => c.CommentId == null).OrderBy(x=>x.Identifier).ToList();
-    }
-
-    public List<Comment> GetAllComments()
-    {
-        return _context.Comments.OrderBy(x => x.Identifier).ToList();
     }
 
 

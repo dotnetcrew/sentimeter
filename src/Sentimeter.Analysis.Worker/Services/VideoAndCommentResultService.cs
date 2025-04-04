@@ -55,7 +55,20 @@ namespace Sentimeter.Analysis.Worker.Services
             return result.Id;
         }
 
+
+        public List<Comment> GetAllCommentsByVideoId(Guid videoId)
+        {
+            return _context.Comments.Where(c => c.VideoId == videoId).OrderBy(x => x.Id).ToList();
+        }
+
+        public List<Comment> GetAllCommentsResultByVideoId(Guid videoId)
+        {
+            return _context.Comments.OrderBy(x => x.Identifier).ToList();
+        }
+
     }
 
     
-}
+
+
+    }

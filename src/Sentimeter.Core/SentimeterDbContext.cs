@@ -33,6 +33,10 @@ public class SentimeterDbContext : DbContext
                 .WithOne(c => c.Video)
                 .HasForeignKey(c => c.VideoId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(v => v.SentimentResult).WithOne()
+                .HasForeignKey<VideoSentimentResult>(v => v.VideoId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Comment>(builder =>
@@ -42,24 +46,20 @@ public class SentimeterDbContext : DbContext
             builder.HasMany(c => c.Replies)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(c => c.SentimentResult).WithOne()
+                .HasForeignKey<CommentSentimentResult>(c => c.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<VideoSentimentResult>(builder =>
         {
             builder.Property(v => v.Result).IsRequired();
-            builder.HasOne(v => v.Video)
-                .WithOne()
-                .HasForeignKey<VideoSentimentResult>(v => v.VideoId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<CommentSentimentResult>(builder =>
         {
             builder.Property(c => c.Result).IsRequired();
-            builder.HasOne(c => c.Comment)
-                .WithOne()
-                .HasForeignKey<CommentSentimentResult>(c => c.CommentId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
 

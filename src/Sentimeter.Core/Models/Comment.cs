@@ -19,4 +19,6 @@ public class Comment
     public Guid? CommentId { get; set; } = null;
 
     public virtual IList<Comment> Replies { get; set; } = [];
+
+    public virtual CommentSentimentResult SentimentResult  { get; set; } = default;
 }

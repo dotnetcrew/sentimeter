@@ -20,4 +20,6 @@ public class Video
     public string? ThumbnailUrl { get; set; }
 
     public virtual IList<Comment> Comments { get; set; } = [];
+    
+    public virtual VideoSentimentResult SentimentResult { get; set; } = default;
 }
