@@ -21,4 +21,23 @@ else
             </div>
         }
     </div>
+    <div class="nav">
+        <ul class="pagination">
+            <li class="page-item align-content-center px-2">
+                page <strong>@currentPage</strong> of <strong>@model.NumberOfPages</strong>
+            </li>
+            <li class="page-item@(model.IsFirstPage ? " disabled" : "")">
+                <button type="button" class="page-link" @onclick="MoveBack">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span>prev</span>
+                </button>
+            </li>
+            <li class="page-item@(model.HasNextPage ? "" : " disabled")">
+                <button type="button" class="page-link" @onclick="MoveNext">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span>next</span>
+                </button>
+            </li>
+        </ul>
+    </div>
 }

@@ -13,17 +13,38 @@ public partial class CommentList(CommentsApiClient commentsApiClient)
 
     private bool loading = false;
 
+    private int currentPage = 1;
+
+    private int size = 10;
+
     protected override async Task OnInitializedAsync()
+    {
+        await LoadCommentsAsync();
+    }
+
+    private async Task LoadCommentsAsync()
     {
         loading = true;
 
         try
         {
-            model = await commentsApiClient.GetCommentsAsync(VideoId, 1, 10);
+            model = await commentsApiClient.GetCommentsAsync(VideoId, currentPage, size);
         }
         finally
         {
             loading = false;
         }
+    }
+
+    private async Task MoveBack()
+    {
+        currentPage--;
+        await LoadCommentsAsync();
+    }
+
+    private async Task MoveNext()
+    {
+        currentPage++;
+        await LoadCommentsAsync();
     }
 }
