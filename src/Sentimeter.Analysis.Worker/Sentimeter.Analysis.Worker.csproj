@@ -9,9 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" Version="9.1.0" />
-	  <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
-	  <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.1.0" />
+	  <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+	  <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.0" />
   </ItemGroup>
 
   <ItemGroup>
