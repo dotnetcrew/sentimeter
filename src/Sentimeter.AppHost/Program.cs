@@ -3,6 +3,8 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+builder.AddDockerComposePublisher();
+
 #region Parameters
 var youtubeApiKey = builder.AddParameter("YoutubeApiKey", secret: true);
 #endregion
@@ -15,7 +17,7 @@ var ollama = builder.AddOllama("sentimeter-ollama")
         {
             rb.WithDataVolume("sentimeter-openwebui-data");
             rb.WithExplicitStart();
-        });
+        }).PublishAsContainer();
 
 bool useGpu = builder.Configuration.GetValue<bool>("Ollama:UseGpu",false);
 if(useGpu)
