@@ -18,6 +18,7 @@ public class CommentEndpointsService : ICommentEndpointsService
         var skip = (page - 1) * size;
 
         var commentsQuery = _context.Comments.AsNoTracking()
+            .Include(c => c.SentimentResult)
             .Where(x => x.VideoId == videoId);
 
         var totalNumberOfComments = await commentsQuery.CountAsync();
@@ -31,7 +32,8 @@ public class CommentEndpointsService : ICommentEndpointsService
                 c.Id,
                 c.Author,
                 c.Content,
-                c.LastUpdate)).ToListAsync();
+                c.LastUpdate,
+                c.SentimentResult == null ? null : new(c.SentimentResult.Result, c.SentimentResult.Score))).ToListAsync();
 
         return new CommentListModel
         {

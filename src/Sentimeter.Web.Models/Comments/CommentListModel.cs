@@ -14,5 +14,10 @@ public class CommentListModel
         Guid Id,
         string Author,
         string Content,
-        DateTime? LastUpdate);
+        DateTime? LastUpdate,
+        SentimentResult? SentimentResult);
+
+    public record SentimentResult(
+        string Result,
+        double Score);
 }

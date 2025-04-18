@@ -1,0 +1,17 @@
+﻿@if (Sentiment.Result is "positivo")
+{
+    <i class="bi bi-emoji-heart-eyes-fill text-success px-2" title="@Sentiment.Score"></i>
+}
+else if (Sentiment.Result is "negativo")
+{
+    <i class="bi bi-emoji-tear-fill text-warning px-2" title="@Sentiment.Score"></i>
+}
+else if (Sentiment.Result is "neutro")
+{
+    <i class="bi bi-emoji-neutral-fill text-info px-2" title="@Sentiment.Score"></i>
+}
+
+@code {
+    [Parameter]
+    public Sentimeter.Web.Models.Comments.CommentListModel.SentimentResult Sentiment { get; set; } = default!;
+}
