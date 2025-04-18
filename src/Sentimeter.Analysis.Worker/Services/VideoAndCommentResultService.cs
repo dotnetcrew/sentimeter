@@ -16,10 +16,13 @@ namespace Sentimeter.Analysis.Worker.Services
         Task<Guid> SaveVideoResultAsync(VideoResultModel videoResult);
         Task<Guid> SaveCommentResultAsync(CommentResultModel videoResult);
 
-        public List<Comment> GetAllCommentsByVideoId(Guid videoId);
-        public List<Comment> GetAllCommentsWithoutResultByVideoId(Guid videoId);
+        List<Comment> GetAllCommentsByVideoId(Guid videoId);
+        List<Comment> GetAllCommentsWithoutResultByVideoId(Guid videoId);
 
-        public List<Video> GetAllVideos();
+        List<Comment> GetAllMainCommentsWithoutResponseByVideoId(Guid videoId);
+
+        List<Video> GetAllVideosWithoutResult();
+        List<Video> GetAllVideos();
     }
     public class VideoAndCommentResultService : IVideoAndCommentResult
     {
@@ -68,9 +71,25 @@ namespace Sentimeter.Analysis.Worker.Services
         }
 
 
+        public List<Video> GetAllVideosWithoutResult()
+        {
+            return _context.Videos
+                .Include(c=>c.SentimentResult)
+                .Where(v => v.SentimentResult == null)
+                .OrderBy(x => x.Id).ToList();
+        }
+
         public List<Comment> GetAllCommentsByVideoId(Guid videoId)
         {
             return _context.Comments.Where(c => c.VideoId == videoId).OrderBy(x => x.Id).ToList();
+        }
+
+        public List<Comment> GetAllMainCommentsWithoutResponseByVideoId(Guid videoId)
+        {
+            return _context.Comments.Include(c => c.Replies)
+                .Where(c => c.VideoId == videoId && !c.Replies.Any())
+                .OrderBy(x => x.Id)
+                .ToList();
         }
 
         public List<Comment> GetAllCommentsWithoutResultByVideoId(Guid videoId)
@@ -79,7 +98,6 @@ namespace Sentimeter.Analysis.Worker.Services
                 .Include(c => c.SentimentResult)
                 .Where(c => c.VideoId == videoId && c.SentimentResult == null )
                 .OrderBy(x => x.Id).ToList();
-
         }
 
     }
