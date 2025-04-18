@@ -27,6 +27,13 @@ else
                         <p>Published at: @model.PublishedAt.Value.ToShortDateString()</p>
                     }
                 </div>
+                @if (!string.IsNullOrEmpty(model.CommentsSummary))
+                {
+                    <div class="col-md-12 mt-2">
+                        <h5>Comments summary</h5>
+                        <p>@model.CommentsSummary</p>
+                    </div>
+                }
             </div>
 
             @if (!string.IsNullOrEmpty(model!.Identifier))

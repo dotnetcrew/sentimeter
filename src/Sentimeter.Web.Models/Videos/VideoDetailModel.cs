@@ -13,4 +13,6 @@ public class VideoDetailModel
     public string? Description { get; set; }
 
     public DateTime? PublishedAt { get; set; }
+
+    public string CommentsSummary { get; set; } = string.Empty;
 }

@@ -22,6 +22,7 @@ public class VideoEndpointsService : IVideoEndpointsService
     public async Task<VideoDetailModel?> GetVideoDetailAsync(Guid videoId, string userId)
     {
         var video = await _context.Videos.AsNoTracking()
+            .Include(v => v.SentimentResult)
             .Where(v => v.UserId == userId)
             .SingleOrDefaultAsync(v => v.Id == videoId);
 
@@ -37,7 +38,8 @@ public class VideoEndpointsService : IVideoEndpointsService
             PublishedAt = video.PublishedAt,
             ThumbnailUrl = video.ThumbnailUrl,
             Identifier = video.Identifier,
-            Id = video.Id
+            Id = video.Id,
+            CommentsSummary = video.SentimentResult?.Result ?? string.Empty
         };
 
         return model;
