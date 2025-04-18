@@ -1,0 +1,29 @@
+﻿@using Sentimeter.Web.Models.Comments
+
+@rendermode InteractiveServer
+
+@inject Sentimeter.Web.App.Services.CommentsApiClient CommentsApiClient
+
+@if (model.Length > 0)
+{
+    <ApexChart TItem="CommentSentimentStatsModel"
+               Title="Comments sentiment">
+        <ApexPointSeries Items="model"
+                         XValue="@(s => s.Result)"
+                         YAggregate="@(s => s.Count())"
+                         SeriesType="SeriesType.Bar"/>
+    </ApexChart>
+}
+
+
+@code {
+    [Parameter]
+    public Guid VideoId { get; set; }
+
+    private CommentSentimentStatsModel[] model = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await CommentsApiClient.GetCommentSentimentStatsAsync(VideoId);
+    }
+}

@@ -15,6 +15,10 @@ internal static class CommentEndpoints
             .WithOpenApi()
             .WithName(nameof(GetComments));
 
+        commentGroup.MapGet("/sentiment/stats", GetCommentSentimentStats)
+            .WithOpenApi()
+            .WithName(nameof(GetCommentSentimentStats));
+
         return builder;
     }
 
@@ -26,5 +30,13 @@ internal static class CommentEndpoints
     {
         var comments = await service.GetCommentsAsync(videoId, page, size);
         return TypedResults.Ok(comments);
+    }
+
+    private static async Task<Ok<CommentSentimentStatsModel[]>> GetCommentSentimentStats(
+        ICommentEndpointsService service,
+        Guid videoId)
+    {
+        var stats = await service.GetCommentSentimentStatsAsync(videoId);
+        return TypedResults.Ok(stats);
     }
 }

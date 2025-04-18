@@ -1,3 +1,4 @@
+using ApexCharts;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -30,6 +31,8 @@ builder.Services.AddAuthentication(oidcScheme)
 builder.Services.AddApiClients();
 
 builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddApexCharts();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

@@ -43,4 +43,16 @@ public class CommentEndpointsService : ICommentEndpointsService
             IsFirstPage = page == 1
         };
     }
+
+    public async Task<CommentSentimentStatsModel[]?> GetCommentSentimentStatsAsync(Guid videoId)
+    {
+        var commentsStats = await _context.Comments.AsNoTracking()
+            .Include(c => c.SentimentResult)
+            .Where(c => c.VideoId == videoId)
+            .Select(c => new CommentSentimentStatsModel(
+                c.SentimentResult == null ? "N/A" : c.SentimentResult.Result, 
+                c.SentimentResult == null ? 0.00 : c.SentimentResult.Score)).ToArrayAsync();
+
+        return commentsStats;
+    }
 }
