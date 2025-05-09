@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Sentimeter.Analysis.Worker.Models;
 using static Sentimeter.Analysis.Worker.Worker;
 using System.Runtime.CompilerServices;
+using static Sentimeter.Web.Models.Comments.CommentListModel;
 
 namespace Sentimeter.Analysis.Worker;
 
@@ -18,6 +19,8 @@ public class Worker : BackgroundService
     private readonly List<ChatMessage> _messageHistoryForVideos;
     private int _executionCount;
     private long _secondsToWait;
+
+    private static string[] _allowedSentimentResults = ["positivo", "negativo", "neutro"];
 
     public Worker(ILogger<Worker> logger,
         IServiceProvider serviceProvider,
@@ -81,7 +84,7 @@ public class Worker : BackgroundService
 
     }
 
-    public static bool IsValidJson(string input)
+    public static bool IsValidJson(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
@@ -128,7 +131,7 @@ public class Worker : BackgroundService
                 await videoAndCommentResult.SaveVideoResultAsync(new VideoResultModel
                 {
                     VideoId = video.Id,
-                    Result = charResponse.Message.Text,
+                    Result = charResponse.Message.Text ?? string.Empty,
                     LastUpdate = DateTime.UtcNow,
                     Score = 1.0
                 });
@@ -158,35 +161,41 @@ public class Worker : BackgroundService
                     stopwatch.Restart();
                     var charResponse = await _client.CompleteAsync([.. _messageHistoryForComments, new(ChatRole.User, "Classifica il sentiment di questo testo nel contesto del nostro test:" + comment.Content + ". Ricorda che si tratta solo di classificazione, non di giudizio.")]);
                     stopwatch.Stop();
-                    _logger.LogInformation($"Message: [{comment.Content}] with response: [{charResponse}] (Elapsed time: {stopwatch.ElapsedMilliseconds} ms)");
+                    _logger.LogInformation(
+                        "Message: [{CommentContent}] with response: [{ResponseText}] (Elapsed time: {ResponseTime} ms)",
+                        comment.Content, charResponse, stopwatch.ElapsedMilliseconds);
 
-                    SentimentResult sentimentResult = new SentimentResult();
+                    SentimentResult sentimentResult = new();
                     sentimentResult.Score = 0.0;
                     sentimentResult.Sentiment = "sconosciuto";
 
                     if (IsValidJson(charResponse.Message.Text))
                     {
-                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                        sentimentResult = JsonSerializer.Deserialize<SentimentResult>(charResponse.Message.Text, options);
+                        sentimentResult = ParseSentimentResponse(charResponse.Message.Text!);
+
                         if (sentimentResult != null)
                         {
-                            _logger.LogInformation($"Sentiment: {sentimentResult.Sentiment}, Score: {sentimentResult.Score}");
+                            _logger.LogInformation(
+                                "Sentiment: {Sentiment}, Score: {SentimentScore}",
+                                sentimentResult.Sentiment, sentimentResult.Score);
                             // Save the sentiment result to the database or perform other actions
                         }
                         else
                         {
-                            _logger.LogWarning($"Failed to deserialize sentiment result: {charResponse.Message.Text}");
+                            _logger.LogWarning(
+                                "Failed to deserialize sentiment result: {ResponseText}",
+                                charResponse.Message.Text);
                         }
                     }
                     else
                     {
-                        _logger.LogWarning($"Invalid JSON response: {charResponse.Message.Text}");
+                        _logger.LogWarning("Invalid JSON response: {ResponseText}", charResponse.Message.Text);
                     }
 
                     await videoAndCommentResult.SaveCommentResultAsync(new CommentResultModel
                     {
                         CommentId = comment.Id,
-                        Result = sentimentResult.Sentiment,
+                        Result = sentimentResult!.Sentiment,
                         LastUpdate = DateTime.UtcNow,
                         Score = sentimentResult.Score
                     });
@@ -195,16 +204,28 @@ public class Worker : BackgroundService
                 catch (Exception ex)
                 {
                     // Handle 
-                    _logger.LogError(ex, $"Error during sentiment analysis of {comment.Content} with commentId: {comment.Id} and videoId: {comment.VideoId} with exception: {ex.Message}");
+                    _logger.LogError(
+                        ex, 
+                        "Error during sentiment analysis of {CommentContent} with commentId: {CommentId} and videoId: {VideoId} with exception: {ErrorMessage}",
+                        comment.Content, comment.Id, comment.VideoId, ex.Message);
                 }
-
             }
-            
-
-
         }
 
         
     }
 
+    private SentimentResult ParseSentimentResponse(string responseText)
+    {
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var sentimentResult = JsonSerializer.Deserialize<SentimentResult>(responseText, options) ?? new();
+
+        if (string.IsNullOrWhiteSpace(sentimentResult.Sentiment) || !_allowedSentimentResults.Contains(sentimentResult.Sentiment, StringComparer.InvariantCultureIgnoreCase))
+        {
+            _logger.LogWarning("Invalid sentiment result: {Sentiment}", sentimentResult.Sentiment);
+            sentimentResult.Sentiment = "sconosciuto";
+        }
+
+        return sentimentResult;
+    }
 }
