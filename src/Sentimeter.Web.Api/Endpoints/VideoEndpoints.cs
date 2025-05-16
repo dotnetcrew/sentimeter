@@ -33,7 +33,18 @@ internal static class VideoEndpoints
             .WithName(nameof(RegisterVideo))
             .WithValidation<RegisterVideoModel>();
 
+        videoGroup.MapGet("stats", GetVideoStats)
+            .WithOpenApi()
+            .WithName(nameof(GetVideoStats));
+
         return builder;
+    }
+
+    private static async Task<Ok<VideoStatsModel>> GetVideoStats(
+        IVideoEndpointsService service)
+    {
+        var model = await service.GetVideoStatsAsync();
+        return TypedResults.Ok(model);
     }
 
     private static async Task<Ok<VideoListModel>> GetVideos(

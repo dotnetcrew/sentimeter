@@ -55,4 +55,15 @@ public class CommentEndpointsService : ICommentEndpointsService
 
         return commentsStats;
     }
+
+    public async Task<CommentStatsModel> GetCommentStatsAsync()
+    {
+        var commentsQuery = _context.Comments.AsNoTracking()
+            .Include(c => c.SentimentResult);
+
+        var totalNumberOfComments = await commentsQuery.CountAsync();
+        var numberOfCommentsAnalyzed = await commentsQuery.CountAsync(c => c.SentimentResult != null);
+
+        return new(totalNumberOfComments, numberOfCommentsAnalyzed);
+    }
 }

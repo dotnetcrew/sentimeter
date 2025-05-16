@@ -19,7 +19,19 @@ internal static class CommentEndpoints
             .WithOpenApi()
             .WithName(nameof(GetCommentSentimentStats));
 
+        builder.MapGet("/api/comments/stats", GetCommentStats)
+            .WithOpenApi()
+            .WithName(nameof(GetCommentStats))
+            .RequireAuthorization();
+
         return builder;
+    }
+
+    private static async Task<Ok<CommentStatsModel>> GetCommentStats(
+        ICommentEndpointsService service)
+    {
+        var model = await service.GetCommentStatsAsync();
+        return TypedResults.Ok(model);
     }
 
     private static async Task<Ok<CommentListModel>> GetComments(

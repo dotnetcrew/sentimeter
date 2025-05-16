@@ -1,0 +1,35 @@
+﻿@rendermode InteractiveServer
+
+@if (!RendererInfo.IsInteractive || loadingStats)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card px-2 py-2">
+                <h3 class="mb-2 text-info">@videoStats.TotalNumberOfVideos</h3>
+                <h6 class="text-muted mb-0">Total Videos</h6>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card px-2 py-2">
+                <h3 class="mb-2 text-success">@videoStats.TotalNumberOfVideoAnalyzed</h3>
+                <h6 class="text-muted mb-0">Videos analyzed</h6>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card px-2 py-2">
+                <h3 class="mb-2 text-info">@commentStats.TotalNumberOfComments</h3>
+                <h6 class="text-muted mb-0">Comments retrieved</h6>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card px-2 py-2">
+                <h3 class="mb-2 text-success">@commentStats.TotalNumberOfCommentsAnalyzed</h3>
+                <h6 class="text-muted mb-0">Comments analyzed</h6>
+            </div>
+        </div>
+    </div>
+}

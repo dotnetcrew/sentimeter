@@ -52,4 +52,10 @@ public class VideosApiClient(HttpClient httpClient)
         var model = await httpClient.GetFromJsonAsync<VideoDetailModel>($"{ResourceEndpoint}/{videoId}");
         return model;
     }
+
+    public async Task<VideoStatsModel> GetVideoStatsAsync()
+    {
+        var model = await httpClient.GetFromJsonAsync<VideoStatsModel>($"{ResourceEndpoint}/stats");
+        return model ?? new(0, 0);
+    }
 }

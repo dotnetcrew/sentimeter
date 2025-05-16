@@ -78,6 +78,17 @@ public class VideoEndpointsService : IVideoEndpointsService
         return model;
     }
 
+    public async Task<VideoStatsModel> GetVideoStatsAsync()
+    {
+        var videosQuery = _context.Videos.AsNoTracking()
+            .Include(x => x.SentimentResult);
+
+        var totalNumberOfVideos = await videosQuery.CountAsync();
+        var numberOfanalyzedVideos = await videosQuery.CountAsync(x => x.SentimentResult != null);
+
+        return new(totalNumberOfVideos, numberOfanalyzedVideos);
+    }
+
     public async Task<Guid> RegisterVideoAsync(RegisterVideoModel model, string userId)
     {
         var video = new Video

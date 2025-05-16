@@ -15,4 +15,10 @@ public class CommentsApiClient(HttpClient httpClient)
         var model = await httpClient.GetFromJsonAsync<CommentSentimentStatsModel[]>($"api/videos/{videoId}/comments/sentiment/stats");
         return model ?? [];
     }
+
+    public async Task<CommentStatsModel> GetCommentStatsAsync()
+    {
+        var model = await httpClient.GetFromJsonAsync<CommentStatsModel>($"api/comments/stats");
+        return model ?? new(0, 0);
+    }
 }
