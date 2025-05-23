@@ -8,12 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Akka" Version="1.5.40" />
-    <PackageReference Include="Akka.DependencyInjection" Version="1.5.40" />
-    <PackageReference Include="Akka.Hosting" Version="1.5.40" />
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.0" />
-    <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.3.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="Akka" Version="1.5.42" />
+    <PackageReference Include="Akka.DependencyInjection" Version="1.5.42" />
+    <PackageReference Include="Akka.Hosting" Version="1.5.42" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.3.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.4.1-beta.291" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
   </ItemGroup>
 
   <ItemGroup>

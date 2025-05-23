@@ -3,7 +3,7 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddDockerComposePublisher();
+builder.AddDockerComposeEnvironment("compose");
 
 #region Parameters
 var youtubeApiKey = builder.AddParameter("YoutubeApiKey", secret: true);

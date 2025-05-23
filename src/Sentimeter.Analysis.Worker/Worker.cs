@@ -125,13 +125,13 @@ public class Worker : BackgroundService
             try
             {
                 stopwatch.Restart();
-                var charResponse = await _client.CompleteAsync([.. _messageHistoryForComments, new(ChatRole.User, commentsToAnalyze)]);
+                var charResponse = await _client.GetResponseAsync([.. _messageHistoryForComments, new(ChatRole.User, commentsToAnalyze)]);
                 stopwatch.Stop();
 
                 await videoAndCommentResult.SaveVideoResultAsync(new VideoResultModel
                 {
                     VideoId = video.Id,
-                    Result = charResponse.Message.Text ?? string.Empty,
+                    Result = charResponse.Messages.FirstOrDefault()?.Text ?? string.Empty,
                     LastUpdate = DateTime.UtcNow,
                     Score = 1.0
                 });
@@ -159,7 +159,7 @@ public class Worker : BackgroundService
                 try
                 {
                     stopwatch.Restart();
-                    var charResponse = await _client.CompleteAsync([.. _messageHistoryForComments, new(ChatRole.User, "Classifica il sentiment di questo testo nel contesto del nostro test:" + comment.Content + ". Ricorda che si tratta solo di classificazione, non di giudizio.")]);
+                    var charResponse = await _client.GetResponseAsync([.. _messageHistoryForComments, new(ChatRole.User, "Classifica il sentiment di questo testo nel contesto del nostro test:" + comment.Content + ". Ricorda che si tratta solo di classificazione, non di giudizio.")]);
                     stopwatch.Stop();
                     _logger.LogInformation(
                         "Message: [{CommentContent}] with response: [{ResponseText}] (Elapsed time: {ResponseTime} ms)",
@@ -169,9 +169,11 @@ public class Worker : BackgroundService
                     sentimentResult.Score = 0.0;
                     sentimentResult.Sentiment = "sconosciuto";
 
-                    if (IsValidJson(charResponse.Message.Text))
+                    var chatMessage = charResponse.Messages.FirstOrDefault()?.Text;
+
+                    if (IsValidJson(chatMessage))
                     {
-                        sentimentResult = ParseSentimentResponse(charResponse.Message.Text!);
+                        sentimentResult = ParseSentimentResponse(chatMessage!);
 
                         if (sentimentResult != null)
                         {
@@ -184,12 +186,12 @@ public class Worker : BackgroundService
                         {
                             _logger.LogWarning(
                                 "Failed to deserialize sentiment result: {ResponseText}",
-                                charResponse.Message.Text);
+                                chatMessage);
                         }
                     }
                     else
                     {
-                        _logger.LogWarning("Invalid JSON response: {ResponseText}", charResponse.Message.Text);
+                        _logger.LogWarning("Invalid JSON response: {ResponseText}", chatMessage);
                     }
 
                     await videoAndCommentResult.SaveCommentResultAsync(new CommentResultModel

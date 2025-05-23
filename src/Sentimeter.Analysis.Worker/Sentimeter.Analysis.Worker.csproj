@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" Version="9.1.0" />
-	  <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.3.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
-	  <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" Version="9.4.1-beta.291" />
+	  <PackageReference Include="CommunityToolkit.Aspire.MassTransit.RabbitMQ" Version="9.4.1-beta.291" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
+	  <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.3.0" />
   </ItemGroup>
 
   <ItemGroup>
